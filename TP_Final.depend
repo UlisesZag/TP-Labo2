@@ -1,9 +1,10 @@
 # depslib dependency file v1.0
-1685990705 source:c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\main.c
+1686006051 source:c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\main.c
 	<stdio.h>
 	<stdlib.h>
 	<ctype.h>
 	<string.h>
+	<windows.h>
 	"utils.h"
 	"structs.h"
 	"binfile.h"
@@ -16,17 +17,18 @@
 	<stdlib.h>
 	"structs.h"
 
-1685990735 c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\csvfile.h
+1686005279 c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\csvfile.h
 	<stdio.h>
 	<stdlib.h>
 
-1685990632 c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\binfile.h
+1686006153 c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\binfile.h
 	<stdio.h>
 	<stdlib.h>
 	<ctype.h>
 
-1685988433 c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\utils.h
+1686004633 c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\utils.h
 	<stdio.h>
 	<stdlib.h>
 	<ctype.h>
+	<windows.h>
 

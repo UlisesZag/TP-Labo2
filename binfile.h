@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-#define TABLE_MAX 64
+#define TABLE_MAX 32
 
 //Funcion que saca el tamaño del archivo
 //SIEMPRE se deberia ejecutar al principio de la funcion, y no mientras se esta moviendo pArchivo
@@ -11,6 +11,26 @@ int tamano_bin(FILE * pArchivo){
     fseek(pArchivo, 0, SEEK_END);
     pos = ftell(pArchivo);
     return pos;
+}
+
+void listar_tabla_creditos(struct credito creditosbin[], int d){
+    printf("ORD | APELLIDO  | NOMBRE  | IMPORTE  | TIPO DE CREDITO | FECHA      | CUOTAS | IMPORTE CUOTA | IVA   | TOTAL CUOTA | ACTIVO\n");
+        for (int i = 0; i < d; i++){
+            printf("%-3d %-12s %-10s %9.2f %17s %3d/%3s/%4d %4d %14.2lf %10.2lf %13.2lf %3d\n",
+                    creditosbin[i].orden,
+                    creditosbin[i].apellido,
+                    creditosbin[i].nombre,
+                    creditosbin[i].importe,
+                    creditosbin[i].tipo,
+                    creditosbin[i].date.dia,
+                    creditosbin[i].date.mes,
+                    creditosbin[i].date.anio,
+                    creditosbin[i].cuotas,
+                    creditosbin[i].importe_cuota,
+                    creditosbin[i].iva,
+                    creditosbin[i].total_cuota,
+                    creditosbin[i].activo);
+        }
 }
 
 //Funcion que crea un archivo creditos.dat vacio.
@@ -85,22 +105,48 @@ void listar_bin(){
         fseek(pArchivo, 0, SEEK_SET);
         fread(&creditosbin, sizeof(struct credito)*TABLE_MAX, 1, pArchivo);
 
-        printf("ORDEN | APELLIDO  | NOMBRE    | IMPORTE | TIPO DE CREDITO | FECHA     | CUOTAS | IMPORTE CUOTA | IVA | TOTAL CUOTA | ACTIVO\n");
-        for (int i = 0; i < registros; i++){
-            printf("%5d %12s %12s %9f %18s %4d/%s/%4d %6d %10.2lf %8.2lf %8.2lf %d\n",
-                    creditosbin[i].orden,
-                    creditosbin[i].apellido,
-                    creditosbin[i].nombre,
-                    creditosbin[i].importe,
-                    creditosbin[i].tipo,
-                    creditosbin[i].date.dia,
-                    creditosbin[i].date.mes,
-                    creditosbin[i].date.anio,
-                    creditosbin[i].cuotas,
-                    creditosbin[i].importe_cuota,
-                    creditosbin[i].iva,
-                    creditosbin[i].total_cuota,
-                    creditosbin[i].activo);
+        listar_tabla_creditos(creditosbin, registros);
+
+        fclose(pArchivo);
+    }
+}
+
+///BAJAS
+void baja_logica(){
+    if (!existe_bin()) return;
+
+    FILE *pArchivo;
+    pArchivo = fopen("creditos.dat", "rb");
+
+    struct credito creditosbin[TABLE_MAX];
+    inicializar_credito(creditosbin, TABLE_MAX);
+
+    if (pArchivo != NULL){
+        //Calcula el tamaño del archivo. Sale si el archivo esta vacio.
+        int fsize = tamano_bin(pArchivo);
+        if (fsize == 0){
+            printf("El archivo \"creditos.dat\" esta vacio.\n");
+            fclose(pArchivo);
+            return;
         }
+
+        //Lee el archivo
+        fseek(pArchivo, 0, SEEK_SET);
+        fread(&creditosbin, sizeof(struct credito)*TABLE_MAX, 1, pArchivo);
+        fclose(pArchivo);
+
+        pArchivo = fopen("creditos.dat", "wb");
+
+        int orden;
+        printf("Ingrese el numero de orden a dar la baja logica:\nORDEN>");
+        scanf("%d", &orden);
+
+        creditosbin[orden-1].activo = 0;
+
+        fwrite(creditosbin, sizeof(struct credito_csv)*TABLE_MAX, 1, pArchivo);
+
+        printf("Baja logica en orden %d realizado con exito.\n", orden);
+
+        fclose(pArchivo);
     }
 }

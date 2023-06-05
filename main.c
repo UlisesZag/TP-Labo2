@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
+#include <windows.h>
 
 #include "utils.h"
 #include "structs.h"
@@ -18,10 +19,10 @@ int main(){
 
     printf("================[ GESTION DE CREDITOS v0.1 ]================\n");
     existe_bin();
-    printf("Ingrese \"ayuda\" para obtener una lista de comandos.\n\n");
+    printf("Ingrese \"ayuda\" para obtener una lista de comandos.\n");
 
     while (!salir){
-        printf(">");
+        printf("\n>");
 
         //Lee la opcion
         scanf("%s", input);
@@ -45,11 +46,15 @@ int main(){
         else if (strcmp(comando, "importarcsv") == 0){
             importar_csv();
         }
+        else if (strcmp(comando, "bajalogica") == 0){
+            baja_logica();
+        }
         else if (strcmp(comando, "ayuda") == 0){
             printf("\n=====[ COMANDOS ]=====\n");
             printf("Base de datos:\n");
             printf("\t nuevodat: Crear nuevo archivo \"creditos.bin\"\n");
             printf("\t listar: Listar todos los creditos.\n");
+            printf("\t bajalogica: Dar de baja a un credito (usuario pasivo).\n");
             printf("CSV:\n");
             printf("\t listarcsv: Listar todos los creditos de un csv.\n");
             printf("\t importarcsv: Importar los datos de un CSV a la base creditos.dat.\n");

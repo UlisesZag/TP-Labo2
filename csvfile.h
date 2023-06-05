@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define TABLE_MAX 64
+#define TABLE_MAX 32
 
 //Lista un csv que ingrese el usuario
 void listar_csv(){
@@ -42,7 +42,7 @@ void listar_csv(){
                     &creditos[pos].importe_cuota,
                     &creditos[pos].iva,
                     &creditos[pos].total_cuota);
-            printf("%4d %19s %9d %8s %4d/%02d/%4d %6d %10.2lf %8.2lf %8.2lf\n",
+            printf("%-4d %-19s %9d %8s %4d/%02d/%4d %6d %10.2lf %8.2lf %8.2lf\n",
                     creditos[pos].orden,
                     creditos[pos].cliente,
                     creditos[pos].importe,
@@ -160,7 +160,8 @@ void importar_csv(){
             strcpy(creditosbin[i].apellido, token); //Lo que queda en TOKEN es el apellido
         }
 
-        fwrite(creditosbin, sizeof(struct credito_csv[TABLE_MAX]), 1, pArchivoBin);
+        fwrite(creditosbin, sizeof(struct credito_csv)*TABLE_MAX, 1, pArchivoBin);
+        fclose(pArchivoBin);
         printf("Conversion de \"%s\" a \"creditos.dat\" exitosa (%d creditos cargados).\n", ruta, pos);
     }
 
