@@ -4,11 +4,11 @@
 #include <string.h>
 
 #include "utils.h"
-#include "binfile.h"
 #include "structs.h"
+#include "binfile.h"
 #include "csvfile.h"
 
-#define TABLE_MAX 64
+#define TABLE_MAX 32
 
 
 int main(){

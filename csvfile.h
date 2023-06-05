@@ -64,9 +64,12 @@ void listar_csv(){
 
 //Convertir un CSV a creditos.dat
 void importar_csv(){
+    char meses[12][4] = {"ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"};
     char ruta[32];
     struct credito_csv creditoscsv[TABLE_MAX];
+    inicializar_creditocsv(creditoscsv, TABLE_MAX);
     struct credito creditosbin[TABLE_MAX];
+    inicializar_credito(creditosbin, TABLE_MAX);
     FILE * pArchivoCsv;
     FILE * pArchivoBin;
 
@@ -130,17 +133,36 @@ void importar_csv(){
             pos++;
             fgets(linea, 1024, pArchivoCsv);
         }
-
         //Convierte la tabla de CSV a tabla de creditos.dat
-        for (int i = 0; i < TABLE_MAX; i++){
+        for (int i = 0; i < pos; i++){
+            //Datos que se pueden pasar de una
             creditosbin[i].orden = creditoscsv[i].orden;
             creditosbin[i].importe = creditoscsv[i].importe;
-            //strcpy(&creditosbin[i].tipo, creditoscsv[i].tipo);
-        }
-    }
+            strcpy(creditosbin[i].tipo, creditoscsv[i].tipo);
+            creditosbin[i].date.dia = creditoscsv[i].date.dia;
+            strcpy(creditosbin[i].date.mes, meses[creditoscsv[i].date.mes-1]); //Cambia el numero por el mes en minusculas
+            creditosbin[i].date.anio = creditoscsv[i].date.anio;
+            creditosbin[i].cuotas = creditoscsv[i].cuotas;
+            creditosbin[i].importe_cuota = creditoscsv[i].importe_cuota;
+            creditosbin[i].iva = creditoscsv[i].iva;
+            creditosbin[i].total_cuota = creditoscsv[i].total_cuota;
+            creditosbin[i].activo = 1;
 
-    //Guarda todo en un archivo
-    fwrite(creditoscsv, sizeof(struct credito_csv[64]), 1, pArchivoBin);
+            //Nombre y apellido
+            char cliente[32];
+            char * token;
+            //Separa en nombre y apellido con strtok
+            strcpy(cliente, creditoscsv[i].cliente);
+            token = strtok(cliente, " ");
+            strcpy(creditosbin[i].nombre, token); //Lo primero que hay en TOKEN es el nombre
+            //Luego concatena lo que queda de string como apellido
+            token = strtok(NULL, "");
+            strcpy(creditosbin[i].apellido, token); //Lo que queda en TOKEN es el apellido
+        }
+
+        fwrite(creditosbin, sizeof(struct credito_csv[TABLE_MAX]), 1, pArchivoBin);
+        printf("Conversion de \"%s\" a \"creditos.dat\" exitosa (%d creditos cargados).\n", ruta, pos);
+    }
 
     fclose(pArchivoCsv);
 }

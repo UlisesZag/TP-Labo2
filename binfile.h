@@ -66,6 +66,9 @@ void listar_bin(){
     FILE *pArchivo;
     pArchivo = fopen("creditos.dat", "rb");
 
+    struct credito creditosbin[TABLE_MAX];
+    inicializar_credito(creditosbin, TABLE_MAX);
+
     if (pArchivo != NULL){
         //Calcula el tamaño del archivo. Sale si el archivo esta vacio.
         int fsize = tamano_bin(pArchivo);
@@ -75,8 +78,29 @@ void listar_bin(){
             return;
         }
 
-        //TODO mostrar un archivo con datos.
+        int registros = fsize/sizeof(struct credito);
+        printf("Cantidad de registros: %d\n", registros);
 
-        printf("ORDEN | APELLIDO | NOMBRE    | IMPORTE | TIPO DE CREDITO | FECHA     | CUOTAS | IMPORTE CUOTA | IVA | TOTAL CUOTA\n");
+        //Lee el archivo
+        fseek(pArchivo, 0, SEEK_SET);
+        fread(&creditosbin, sizeof(struct credito)*TABLE_MAX, 1, pArchivo);
+
+        printf("ORDEN | APELLIDO  | NOMBRE    | IMPORTE | TIPO DE CREDITO | FECHA     | CUOTAS | IMPORTE CUOTA | IVA | TOTAL CUOTA | ACTIVO\n");
+        for (int i = 0; i < registros; i++){
+            printf("%5d %12s %12s %9f %18s %4d/%s/%4d %6d %10.2lf %8.2lf %8.2lf %d\n",
+                    creditosbin[i].orden,
+                    creditosbin[i].apellido,
+                    creditosbin[i].nombre,
+                    creditosbin[i].importe,
+                    creditosbin[i].tipo,
+                    creditosbin[i].date.dia,
+                    creditosbin[i].date.mes,
+                    creditosbin[i].date.anio,
+                    creditosbin[i].cuotas,
+                    creditosbin[i].importe_cuota,
+                    creditosbin[i].iva,
+                    creditosbin[i].total_cuota,
+                    creditosbin[i].activo);
+        }
     }
 }
