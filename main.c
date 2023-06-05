@@ -2,9 +2,13 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
+
+#include "utils.h"
 #include "binfile.h"
 #include "structs.h"
 #include "csvfile.h"
+
+#define TABLE_MAX 64
 
 
 int main(){
@@ -36,7 +40,10 @@ int main(){
             listar_bin();
         }
         else if (strcmp(comando, "listarcsv") == 0){
-            listar_txt();
+            listar_csv();
+        }
+        else if (strcmp(comando, "importarcsv") == 0){
+            importar_csv();
         }
         else if (strcmp(comando, "ayuda") == 0){
             printf("\n=====[ COMANDOS ]=====\n");
@@ -45,6 +52,7 @@ int main(){
             printf("\t listar: Listar todos los creditos.\n");
             printf("CSV:\n");
             printf("\t listarcsv: Listar todos los creditos de un csv.\n");
+            printf("\t importarcsv: Importar los datos de un CSV a la base creditos.dat.\n");
             printf("Otros:\n");
             printf("\t ayuda: Mostrar lista de comandos.\n");
             printf("\t salir: Salir\n");

@@ -31,10 +31,9 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="binfile.h" />
+		<Unit filename="csvfile.h" />
 		<Unit filename="main.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="structs.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="structs.h" />

@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <ctype.h>
 
+#define TABLE_MAX 64
+
 //Funcion que saca el tamaño del archivo
 //SIEMPRE se deberia ejecutar al principio de la funcion, y no mientras se esta moviendo pArchivo
 int tamano_bin(FILE * pArchivo){

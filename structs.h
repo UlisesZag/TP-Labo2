@@ -17,12 +17,12 @@ struct credito{
     char nombre[32];
     char apellido[32];
     float importe;
-    int tipo;
+    char tipo[32];
     struct fecha_mes date;
     int cuotas;
-    float importe_cuota;
-    float iva;
-    float total_cuota;
+    double importe_cuota;
+    double iva;
+    double total_cuota;
     int activo;
 };
 
@@ -34,7 +34,7 @@ struct credito_csv{
     char tipo[32];
     struct fecha date;
     int cuotas;
-    float importe_cuota;
-    float iva;
-    float total_cuota;
+    double importe_cuota;
+    double iva;
+    double total_cuota;
 };
