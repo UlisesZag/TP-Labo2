@@ -13,6 +13,7 @@ struct fecha_mes{
 
 //Struct con los datos de un credito, el cual se guarda en creditos.dat
 struct credito{
+    int orden;
     char nombre[32];
     char apellido[32];
     float importe;
@@ -27,9 +28,10 @@ struct credito{
 
 //Struct con los datos de un credito, leido directamente del CSV, el cual se convierte a un struct credito
 struct credito_csv{
+    int orden;
     char cliente[32];
     int importe;
-    int tipo;
+    char tipo[32];
     struct fecha date;
     int cuotas;
     float importe_cuota;

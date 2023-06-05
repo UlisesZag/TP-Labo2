@@ -8,13 +8,11 @@
 
 
 int main(){
-    struct credito creditos[64]; //Toda la tabla de creditos.
-
     //Menu principal
     char input[32];
     int salir = 0;
 
-    printf("================ GESTION DE CREDITOS v0.1 ================\n");
+    printf("================[ GESTION DE CREDITOS v0.1 ]================\n");
     existe_bin();
     printf("Ingrese \"ayuda\" para obtener una lista de comandos.\n\n");
 
@@ -24,7 +22,6 @@ int main(){
         //Lee la opcion
         scanf("%s", input);
         fflush(stdin);
-        //input = toupper(opcion);
 
         char * comando;
         comando = strtok(input, " ");
@@ -35,9 +32,20 @@ int main(){
         else if (strcmp(comando, "salir") == 0){
             salir = 1;
         }
+        else if (strcmp(comando, "listar") == 0){
+            listar_bin();
+        }
+        else if (strcmp(comando, "listarcsv") == 0){
+            listar_txt();
+        }
         else if (strcmp(comando, "ayuda") == 0){
-            printf("\nCOMANDOS:\n");
+            printf("\n=====[ COMANDOS ]=====\n");
+            printf("Base de datos:\n");
             printf("\t nuevodat: Crear nuevo archivo \"creditos.bin\"\n");
+            printf("\t listar: Listar todos los creditos.\n");
+            printf("CSV:\n");
+            printf("\t listarcsv: Listar todos los creditos de un csv.\n");
+            printf("Otros:\n");
             printf("\t ayuda: Mostrar lista de comandos.\n");
             printf("\t salir: Salir\n");
         }
