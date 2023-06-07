@@ -1,0 +1,4 @@
+*.dat
+*.xyz
+bin/
+obj/
