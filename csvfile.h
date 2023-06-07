@@ -167,3 +167,28 @@ void importar_csv(){
 
     fclose(pArchivoCsv);
 }
+
+//Lista el archivo XYZ
+void listar_xyz(){
+    char ruta[32];
+    FILE * pArchivo;
+
+    printf("Ingrese la ruta del archivo XYZ a listar: \nRUTA>");
+    scanf("%s", ruta);
+    fflush(stdin);
+
+    //Abre el archivo en solo lectura
+    pArchivo = fopen(ruta, "r");
+
+    if (pArchivo == NULL){
+        printf("ERROR: El archivo no existe. Verificar ruta ingresada.\n");
+    }
+    else{
+        char linea[2048];
+        fgets(linea, 2048, pArchivo);
+        while (!feof(pArchivo)){
+            printf("%s", linea);
+            fgets(linea, 2048, pArchivo);
+        }
+    }
+}

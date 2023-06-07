@@ -49,6 +49,12 @@ int main(){
         else if (strcmp(comando, "bajalogica") == 0){
             baja_logica();
         }
+        else if (strcmp(comando, "bajafisica") == 0){
+            baja_fisica();
+        }
+        else if (strcmp(comando, "listarxyz") == 0){
+            listar_xyz();
+        }
         else if (strcmp(comando, "ayuda") == 0){
             printf("\n=====[ COMANDOS ]=====\n");
             printf("Base de datos:\n");

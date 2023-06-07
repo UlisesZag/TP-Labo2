@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <windows.h>
+#include <time.h>
 
 //Toma un string y cambia todos los caracteres "reemplazado" por los "reemplazante"
 void string_changechar(char str[], int largo, char reemplazado, char reemplazante){
@@ -28,6 +29,15 @@ void string_tolower(char str[], int largo){
     }
 }
 
+//agarra un string y devuelve la fecha
+void get_date_string(char str[], char separator){
+    time_t t = time(NULL);
+    struct tm tiempo = *localtime(&t);
+
+    sprintf(str, "%02d%c%02d%c%04d", tiempo.tm_mday, separator, tiempo.tm_mon, separator, 1900+tiempo.tm_year); //String a devolver
+}
+
+/*
 //Copiado de stackoverflow, solamente esta para hacer mas grande la consola.
 struct SMALL_RECT {
     SHORT Left;
@@ -55,3 +65,5 @@ void adjust_window_size(short width, short height){
     //SetConsoleWindowInfo(hStdout, ok, &test);
 
 } //end adjustWindowSize
+
+*/
