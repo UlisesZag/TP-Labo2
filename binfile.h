@@ -13,10 +13,11 @@ int tamano_bin(FILE * pArchivo){
     return pos;
 }
 
-void listar_tabla_creditos(struct credito creditosbin[], int d, int opcion){
+void listar_tabla_creditos(struct credito creditosbin[], int d, int opcion, char tipo[]){
     printf("ORD | APELLIDO  | NOMBRE  | IMPORTE  | TIPO DE CREDITO | FECHA      | CUOTAS | IMPORTE CUOTA | IVA   | TOTAL CUOTA | ACTIVO\n");
     for (int i = 0; i < d; i++){
         if (opcion == 1 && creditosbin[i].activo == 0) continue; //Si la opcion es solo los activos, no imprimir los inactivos
+        if (opcion == 2 && strcmp(creditosbin[i].tipo, tipo) != 0) continue; //Si la opcion es solo los activos, no imprimir los inactivos
         printf("%-3d  %-11s %-10s %9.2f %17s  %02d/%3s/%04d %8d %14.2lf %8.2lf %13.2lf %3d\n",
                 creditosbin[i].orden,
                 creditosbin[i].apellido,
@@ -81,7 +82,7 @@ int existe_bin(){
 }
 
 //Funcion que muestra los archivos de creditos.dat
-void listar_bin(char * arg1){
+void listar_bin(char *arg1, char *arg2){
     if (!existe_bin()) return;
 
     FILE *pArchivo;
@@ -100,17 +101,32 @@ void listar_bin(char * arg1){
         }
 
         int registros = fsize/sizeof(struct credito);
-        printf("Cantidad de registros: %d\n", registros);
 
         //Lee el archivo
         fseek(pArchivo, 0, SEEK_SET);
         fread(&creditosbin, sizeof(struct credito)*TABLE_MAX, 1, pArchivo);
 
         int opcion = 0; //Filtros de listado
+        char tipo[32];
         if (arg1 != NULL){
             if (strcmp(arg1, "activos") == 0) opcion = 1;
+            if (strcmp(arg1, "tipo") == 0) opcion = 2;
         }
-        listar_tabla_creditos(creditosbin, registros, opcion);
+
+        if (opcion == 2){
+            if (strcmp(arg2, "garantia") == 0){
+                strcpy(tipo, "CON GARANTIA");
+            }
+            else if (strcmp(arg2, "firma") == 0){
+                strcpy(tipo, "A SOLA FIRMA");
+            }
+            else{
+                printf("Ingrese el tipo de firma:\nTIPO> ");
+                gets(tipo);
+                string_toupper(tipo, strlen(tipo));
+            }
+        }
+        listar_tabla_creditos(creditosbin, registros, opcion, tipo);
 
         fclose(pArchivo);
     }
@@ -144,7 +160,7 @@ void baja_logica(char * arg1){
         //Lee el numero de orden, ya sea por linea de comandos o por entrada aparte
         int orden;
         if (arg1 == NULL){
-            printf("Ingrese el numero de orden a dar la baja logica:\nORDEN>");
+            printf("Ingrese el numero de orden a dar la baja logica:\nORDEN> ");
             scanf("%d", &orden);
             fflush(stdin);
         }
@@ -210,7 +226,7 @@ void baja_fisica(char *arg1){
         //Lee el numero de orden, ya sea por linea de comandos o por entrada aparte
         int orden;
         if (arg1 == NULL){
-            printf("Ingrese el numero de orden a dar la baja logica:\nORDEN>");
+            printf("Ingrese el numero de orden a dar la baja logica:\nORDEN> ");
             scanf("%d", &orden);
             fflush(stdin);
         }

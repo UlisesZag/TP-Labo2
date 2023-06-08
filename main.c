@@ -22,11 +22,12 @@ int main(){
     printf("Ingrese \"ayuda\" para obtener una lista de comandos.\n");
 
     while (!salir){
-        printf("\n>");
+        printf("\n> ");
 
         //Lee la opcion
         gets(input);
         fflush(stdin);
+        string_tolower(input, strlen(input));
         //Lo divide en comando y argumentos
         char *saveptr = NULL;
         char *comando = NULL;
@@ -43,7 +44,7 @@ int main(){
             salir = 1;
         }
         else if (strcmp(comando, "listar") == 0){
-            listar_bin(arg1);
+            listar_bin(arg1, arg2);
         }
         else if (strcmp(comando, "listarcsv") == 0){
             listar_csv(arg1);
