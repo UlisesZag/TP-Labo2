@@ -4,14 +4,20 @@
 #define TABLE_MAX 32
 
 //Lista un csv que ingrese el usuario
-void listar_csv(){
+void listar_csv(char * arg1){
     char ruta[32];
     struct credito_csv creditos[TABLE_MAX];
     FILE * pArchivo;
 
-    printf("Ingrese la ruta del archivo CSV a listar: \nRUTA>");
-    scanf("%s", ruta);
-    fflush(stdin);
+    //Si ARG1 es ingresado, lo usa como ruta de csv.
+    if (arg1 == NULL){
+        printf("Ingrese la ruta del archivo CSV a listar: \nRUTA>");
+        scanf("%s", ruta);
+        fflush(stdin);
+    }
+    else{
+        strcpy(ruta, arg1);
+    }
 
     //Abre el archivo en solo lectura
     pArchivo = fopen(ruta, "r");
@@ -42,7 +48,7 @@ void listar_csv(){
                     &creditos[pos].importe_cuota,
                     &creditos[pos].iva,
                     &creditos[pos].total_cuota);
-            printf("%-4d %-19s %9d %8s %4d/%02d/%4d %6d %10.2lf %8.2lf %8.2lf\n",
+            printf("%-4d %-19s %9d %8s   %02d/%02d/%4d %6d %10.2lf %8.2lf %8.2lf\n",
                     creditos[pos].orden,
                     creditos[pos].cliente,
                     creditos[pos].importe,
@@ -63,7 +69,7 @@ void listar_csv(){
 }
 
 //Convertir un CSV a creditos.dat
-void importar_csv(){
+void importar_csv(char *arg1){
     char meses[12][4] = {"ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"};
     char ruta[32];
     struct credito_csv creditoscsv[TABLE_MAX];
@@ -73,10 +79,15 @@ void importar_csv(){
     FILE * pArchivoCsv;
     FILE * pArchivoBin;
 
-
-    printf("Ingrese la ruta del archivo CSV a importar como creditos.dat: \nRUTA>");
-    scanf("%s", ruta);
-    fflush(stdin);
+    //Si ARG1 es ingresado, lo usa como ruta de archivo csv
+    if (arg1 == NULL){
+        printf("Ingrese la ruta del archivo CSV a importar como creditos.dat: \nRUTA>");
+        scanf("%s", ruta);
+        fflush(stdin);
+    }
+    else{
+        strcpy(ruta, arg1);
+    }
 
     //Abre el archivo en solo lectura
     pArchivoCsv = fopen(ruta, "r");
@@ -138,7 +149,6 @@ void importar_csv(){
             //Datos que se pueden pasar de una
             creditosbin[i].orden = creditoscsv[i].orden;
             creditosbin[i].importe = creditoscsv[i].importe;
-            strcpy(creditosbin[i].tipo, creditoscsv[i].tipo);
             creditosbin[i].date.dia = creditoscsv[i].date.dia;
             strcpy(creditosbin[i].date.mes, meses[creditoscsv[i].date.mes-1]); //Cambia el numero por el mes en minusculas
             creditosbin[i].date.anio = creditoscsv[i].date.anio;
@@ -151,16 +161,25 @@ void importar_csv(){
             //Nombre y apellido
             char cliente[32];
             char * token;
-            //Separa en nombre y apellido con strtok
-            strcpy(cliente, creditoscsv[i].cliente);
+            strcpy(cliente, creditoscsv[i].cliente);//Separa en nombre y apellido con strtok
             token = strtok(cliente, " ");
             strcpy(creditosbin[i].nombre, token); //Lo primero que hay en TOKEN es el nombre
-            //Luego concatena lo que queda de string como apellido
-            token = strtok(NULL, "");
-            strcpy(creditosbin[i].apellido, token); //Lo que queda en TOKEN es el apellido
+
+            //El apellido lo pongo en otro string porque hay que ponerlo en mayusculas
+            char apellido[32];
+            token = strtok(NULL, ""); //Luego concatena lo que queda de string como apellido
+            strcpy(apellido, token);
+            string_toupper(apellido, strlen(apellido));
+            strcpy(creditosbin[i].apellido, apellido); //Lo que queda en TOKEN es el apellido
+
+            //Lo mismo con el tipo de credito.
+            char tipo_credito[32];
+            strcpy(tipo_credito, creditoscsv[i].tipo);
+            string_toupper(tipo_credito, strlen(tipo_credito));
+            strcpy(creditosbin[i].tipo, tipo_credito);
         }
 
-        fwrite(creditosbin, sizeof(struct credito_csv)*TABLE_MAX, 1, pArchivoBin);
+        fwrite(creditosbin, sizeof(struct credito)*TABLE_MAX, 1, pArchivoBin);
         fclose(pArchivoBin);
         printf("Conversion de \"%s\" a \"creditos.dat\" exitosa (%d creditos cargados).\n", ruta, pos);
     }

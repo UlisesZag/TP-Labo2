@@ -25,11 +25,16 @@ int main(){
         printf("\n>");
 
         //Lee la opcion
-        scanf("%s", input);
+        gets(input);
         fflush(stdin);
-
-        char * comando;
-        comando = strtok(input, " ");
+        //Lo divide en comando y argumentos
+        char *saveptr = NULL;
+        char *comando = NULL;
+        char *arg1 = NULL;
+        char *arg2 = NULL;
+        comando = strtok_r(input, " ", &saveptr);
+        arg1 = strtok_r(NULL, " ", &saveptr);
+        arg2 = strtok_r(NULL, " ", &saveptr);
 
         if (strcmp(comando, "nuevodat") == 0){
             crear_creditosdat();
@@ -38,29 +43,31 @@ int main(){
             salir = 1;
         }
         else if (strcmp(comando, "listar") == 0){
-            listar_bin();
+            listar_bin(arg1);
         }
         else if (strcmp(comando, "listarcsv") == 0){
-            listar_csv();
+            listar_csv(arg1);
         }
         else if (strcmp(comando, "importarcsv") == 0){
-            importar_csv();
+            importar_csv(arg1);
         }
         else if (strcmp(comando, "bajalogica") == 0){
-            baja_logica();
+            baja_logica(arg1);
         }
         else if (strcmp(comando, "bajafisica") == 0){
-            baja_fisica();
+            baja_fisica(arg1);
         }
         else if (strcmp(comando, "listarxyz") == 0){
             listar_xyz();
         }
         else if (strcmp(comando, "ayuda") == 0){
             printf("\n=====[ COMANDOS ]=====\n");
-            printf("Base de datos:\n");
+            printf("Tabla de creditos:\n");
             printf("\t nuevodat: Crear nuevo archivo \"creditos.bin\"\n");
             printf("\t listar: Listar todos los creditos.\n");
             printf("\t bajalogica: Dar de baja a un credito (usuario pasivo).\n");
+            printf("\t bajafisica: Borra a un credito de la tabla, y lo escribe en un archivo .xyz por fecha.\n");
+            printf("\t listarxyz: Listar un archivo .xyz hecho por bajafisica.\n");
             printf("CSV:\n");
             printf("\t listarcsv: Listar todos los creditos de un csv.\n");
             printf("\t importarcsv: Importar los datos de un CSV a la base creditos.dat.\n");

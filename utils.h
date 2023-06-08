@@ -17,7 +17,8 @@ void string_changechar(char str[], int largo, char reemplazado, char reemplazant
 void string_toupper(char str[], int largo){
     for (int i = 0; i < largo; i++){
         if (str[i] == '\0') break;
-        str[i] = toupper(str[i]);
+        if (str[i] == 'ñ') str[i] = 'Ñ';
+        str[i] = toupper(str[i]); //Caracteres ingles
     }
 }
 
@@ -25,6 +26,7 @@ void string_toupper(char str[], int largo){
 void string_tolower(char str[], int largo){
     for (int i = 0; i < largo; i++){
         if (str[i] == '\0') break;
+        if (str[i] == 'Ñ') str[i] = 'ñ';
         str[i] = tolower(str[i]);
     }
 }

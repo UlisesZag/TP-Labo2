@@ -13,24 +13,25 @@ int tamano_bin(FILE * pArchivo){
     return pos;
 }
 
-void listar_tabla_creditos(struct credito creditosbin[], int d){
+void listar_tabla_creditos(struct credito creditosbin[], int d, int opcion){
     printf("ORD | APELLIDO  | NOMBRE  | IMPORTE  | TIPO DE CREDITO | FECHA      | CUOTAS | IMPORTE CUOTA | IVA   | TOTAL CUOTA | ACTIVO\n");
-        for (int i = 0; i < d; i++){
-            printf("%-3d %-12s %-10s %9.2f %17s %3d/%3s/%4d %4d %14.2lf %10.2lf %13.2lf %3d\n",
-                    creditosbin[i].orden,
-                    creditosbin[i].apellido,
-                    creditosbin[i].nombre,
-                    creditosbin[i].importe,
-                    creditosbin[i].tipo,
-                    creditosbin[i].date.dia,
-                    creditosbin[i].date.mes,
-                    creditosbin[i].date.anio,
-                    creditosbin[i].cuotas,
-                    creditosbin[i].importe_cuota,
-                    creditosbin[i].iva,
-                    creditosbin[i].total_cuota,
-                    creditosbin[i].activo);
-        }
+    for (int i = 0; i < d; i++){
+        if (opcion == 1 && creditosbin[i].activo == 0) continue; //Si la opcion es solo los activos, no imprimir los inactivos
+        printf("%-3d  %-11s %-10s %9.2f %17s  %02d/%3s/%04d %8d %14.2lf %8.2lf %13.2lf %3d\n",
+                creditosbin[i].orden,
+                creditosbin[i].apellido,
+                creditosbin[i].nombre,
+                creditosbin[i].importe,
+                creditosbin[i].tipo,
+                creditosbin[i].date.dia,
+                creditosbin[i].date.mes,
+                creditosbin[i].date.anio,
+                creditosbin[i].cuotas,
+                creditosbin[i].importe_cuota,
+                creditosbin[i].iva,
+                creditosbin[i].total_cuota,
+                creditosbin[i].activo);
+    }
 }
 
 //Funcion que crea un archivo creditos.dat vacio.
@@ -74,13 +75,13 @@ int existe_bin(){
         return 1;
     }
     else{
-        printf("[!] No existe un archivo \"creditos.bin\". Cree uno con \"nuevodat\" o importe un CSV con \"importar\".\n\n");
+        printf("[!] No existe un archivo \"creditos.bin\". Cree uno con \"nuevodat\" o importe un CSV con \"importarcsv\".\n\n");
         return 0;
     }
 }
 
 //Funcion que muestra los archivos de creditos.dat
-void listar_bin(){
+void listar_bin(char * arg1){
     if (!existe_bin()) return;
 
     FILE *pArchivo;
@@ -105,14 +106,19 @@ void listar_bin(){
         fseek(pArchivo, 0, SEEK_SET);
         fread(&creditosbin, sizeof(struct credito)*TABLE_MAX, 1, pArchivo);
 
-        listar_tabla_creditos(creditosbin, registros);
+        int opcion = 0; //Filtros de listado
+        if (arg1 != NULL){
+            if (strcmp(arg1, "activos") == 0) opcion = 1;
+        }
+        listar_tabla_creditos(creditosbin, registros, opcion);
 
         fclose(pArchivo);
     }
 }
 
 ///BAJAS
-void baja_logica(){
+//Funcion que da de baja a un credito (activo = 0;
+void baja_logica(char * arg1){
     if (!existe_bin()) return;
 
     FILE *pArchivo;
@@ -135,9 +141,16 @@ void baja_logica(){
         fread(&creditosbin, sizeof(struct credito)*TABLE_MAX, 1, pArchivo);
         fclose(pArchivo);
 
+        //Lee el numero de orden, ya sea por linea de comandos o por entrada aparte
         int orden;
-        printf("Ingrese el numero de orden a dar la baja logica:\nORDEN>");
-        scanf("%d", &orden);
+        if (arg1 == NULL){
+            printf("Ingrese el numero de orden a dar la baja logica:\nORDEN>");
+            scanf("%d", &orden);
+            fflush(stdin);
+        }
+        else{
+            sscanf(arg1, "%d", &orden);
+        }
 
         //SI EL VALOR ESTA FUERA DE RANGO
         if (orden < 1 || orden > TABLE_MAX){
@@ -161,7 +174,7 @@ void baja_logica(){
 
         creditosbin[orden-1].activo = 0;
 
-        fwrite(creditosbin, sizeof(struct credito_csv)*TABLE_MAX, 1, pArchivo);
+        fwrite(creditosbin, sizeof(struct credito)*TABLE_MAX, 1, pArchivo);
 
         printf("Baja logica en orden %d realizado con exito.\n", orden);
 
@@ -169,7 +182,8 @@ void baja_logica(){
     }
 }
 
-void baja_fisica(){
+//Funcion que borra completamente a un credito
+void baja_fisica(char *arg1){
     if (!existe_bin()) return;
 
     FILE *pArchivo;
@@ -193,9 +207,16 @@ void baja_fisica(){
         fread(&creditosbin, sizeof(struct credito)*TABLE_MAX, 1, pArchivo);
         fclose(pArchivo);
 
+        //Lee el numero de orden, ya sea por linea de comandos o por entrada aparte
         int orden;
-        printf("Ingrese el numero de orden a dar la baja logica:\nORDEN>");
-        scanf("%d", &orden);
+        if (arg1 == NULL){
+            printf("Ingrese el numero de orden a dar la baja logica:\nORDEN>");
+            scanf("%d", &orden);
+            fflush(stdin);
+        }
+        else{
+            sscanf(arg1, "%d", &orden);
+        }
 
         //SI EL VALOR ESTA FUERA DE RANGO
         if (orden < 1 || orden > TABLE_MAX){
@@ -249,7 +270,7 @@ void baja_fisica(){
         creditosbin[orden-1].iva = 0;
         creditosbin[orden-1].total_cuota = 0;
 
-        fwrite(creditosbin, sizeof(struct credito_csv)*TABLE_MAX, 1, pArchivo);
+        fwrite(creditosbin, sizeof(struct credito)*TABLE_MAX, 1, pArchivo);
 
         printf("Baja fisica en orden %d realizado con exito.\n", orden);
 
@@ -257,3 +278,4 @@ void baja_fisica(){
         fclose(pArchivoXyz);
     }
 }
+

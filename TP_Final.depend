@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1686171293 source:c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\main.c
+1686180895 source:c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\main.c
 	<stdio.h>
 	<stdlib.h>
 	<ctype.h>
@@ -10,23 +10,23 @@
 	"binfile.h"
 	"csvfile.h"
 
-1685987805 c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\structs.h
+1686174985 c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\structs.h
 
 1685913576 source:c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\structs.c
 	<stdio.h>
 	<stdlib.h>
 	"structs.h"
 
-1686172884 c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\csvfile.h
+1686182863 c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\csvfile.h
 	<stdio.h>
 	<stdlib.h>
 
-1686172411 c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\binfile.h
+1686188016 c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\binfile.h
 	<stdio.h>
 	<stdlib.h>
 	<ctype.h>
 
-1686172626 c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\utils.h
+1686175807 c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\utils.h
 	<stdio.h>
 	<stdlib.h>
 	<ctype.h>
