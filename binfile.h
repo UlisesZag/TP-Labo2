@@ -13,6 +13,7 @@ int tamano_bin(FILE * pArchivo){
     return pos;
 }
 
+//Funcion que muestra la tabla de creditos, con filtros segun opcion y "tipo"
 void listar_tabla_creditos(struct credito creditosbin[], int d, int opcion, char tipo[]){
     printf("ORD | APELLIDO  | NOMBRE  | IMPORTE  | TIPO DE CREDITO | FECHA      | CUOTAS | IMPORTE CUOTA | IVA   | TOTAL CUOTA | ACTIVO\n");
     for (int i = 0; i < d; i++){
@@ -81,7 +82,7 @@ int existe_bin(){
     }
 }
 
-//Funcion que muestra los archivos de creditos.dat
+///LISTAR: Funcion que muestra los archivos de creditos.dat
 void listar_bin(char *arg1, char *arg2){
     if (!existe_bin()) return;
 
@@ -114,16 +115,26 @@ void listar_bin(char *arg1, char *arg2){
         }
 
         if (opcion == 2){
-            if (strcmp(arg2, "garantia") == 0){
+            if (arg2 != NULL && strcmp(arg2, "garantia") == 0){
                 strcpy(tipo, "CON GARANTIA");
             }
-            else if (strcmp(arg2, "firma") == 0){
+            else if (arg2 != NULL && strcmp(arg2, "firma") == 0){
                 strcpy(tipo, "A SOLA FIRMA");
             }
             else{
-                printf("Ingrese el tipo de firma:\nTIPO> ");
-                gets(tipo);
-                string_toupper(tipo, strlen(tipo));
+                char tipo_c;
+                printf("Ingrese el tipo de firma:\nA: CON GARANTIA\nB: A SOLA FIRMA\nTIPO> ");
+                scanf("%c", &tipo_c);
+                fflush(stdin);
+                tipo_c = toupper(tipo_c);
+
+                if (tipo_c == 'A') strcpy(tipo, "CON GARANTIA");
+                else if (tipo_c == 'B') strcpy(tipo, "A SOLA FIRMA");
+                else{
+                    printf("[!] Tipo de credito invalido.");
+                    fclose(pArchivo);
+                    return;
+                }
             }
         }
         listar_tabla_creditos(creditosbin, registros, opcion, tipo);
@@ -132,8 +143,121 @@ void listar_bin(char *arg1, char *arg2){
     }
 }
 
-///BAJAS
-//Funcion que da de baja a un credito (activo = 0;
+///ALTAS: Funcion que da de alta a un credito.
+void alta(char * arg1){
+    if (!existe_bin()) return;
+
+    FILE *pArchivo;
+    pArchivo = fopen("creditos.dat", "rb");
+
+    struct credito creditosbin[TABLE_MAX];
+    inicializar_credito(creditosbin, TABLE_MAX);
+
+    if (pArchivo != NULL){
+        //Calcula el tamaño del archivo. Sale si el archivo esta vacio.
+        int fsize = tamano_bin(pArchivo);
+        if (fsize == 0){
+            printf("El archivo \"creditos.dat\" esta vacio.\n");
+            fclose(pArchivo);
+            return;
+        }
+
+        //Lee el archivo
+        fseek(pArchivo, 0, SEEK_SET);
+        fread(&creditosbin, sizeof(struct credito)*TABLE_MAX, 1, pArchivo);
+        fclose(pArchivo);
+
+        //Lee el numero de orden, ya sea por linea de comandos o por entrada aparte
+        printf("----- DAR NUEVA ALTA -----\n");
+        //Orden
+        int orden;
+        if (arg1 == NULL){
+            printf("Ingrese el numero de orden del credito a dar alta:\nORDEN> ");
+            scanf("%d", &orden);
+            fflush(stdin);
+        }
+        else{
+            sscanf(arg1, "%d", &orden);
+        }
+
+        if (orden < 1 || orden > TABLE_MAX){//SI EL VALOR ESTA FUERA DE RANGO
+            printf("[!] Orden ingresado fuera de rango. Ingrese un numero de orden valido.\n");
+            return;
+        }
+        if (creditosbin[orden-1].orden != 0){//SI EL CREDITO NO EXISTE
+            printf("[!] Ya existe un credito de orden %d. Elija otro.\n", orden);
+            return;
+        }
+
+        creditosbin[orden-1].orden = orden;
+
+        //Nombre
+        printf("Nombre: ");
+        scanf("%32s", creditosbin[orden-1].nombre);
+        fflush(stdin);
+        //Apellido
+        printf("Apellido: ");
+        scanf("%32s", creditosbin[orden-1].apellido);
+        fflush(stdin);
+        string_toupper(creditosbin[orden-1].apellido, strlen(creditosbin[orden-1].apellido));
+
+        //Importe
+        creditosbin[orden-1].importe = scan_num_range("Importe: ", 0, 9999999);
+
+        //Tipo
+        char tipo_c;
+        do{
+            printf("Ingrese un tipo de credito. (A: CON GARANTIA; B: A SOLA FIRMA)\nTipo: ");
+            scanf("%c", &tipo_c);
+            fflush(stdin);
+            tipo_c = toupper(tipo_c);
+
+            if (tipo_c != 'A' && tipo_c != 'B')
+                printf("[!] Tipo de credito invalido. Ingrese un tipo de credito valido.\n");
+        } while (tipo_c != 'A' && tipo_c != 'B');
+
+        if (tipo_c == 'A') strcpy(creditosbin[orden-1].tipo, "CON GARANTIA");
+        if (tipo_c == 'B') strcpy(creditosbin[orden-1].tipo, "A SOLA FIRMA");
+
+
+        //Fecha
+        char strfecha[11] = "00/00/0000";
+        do{
+            printf("Ingrese la fecha (formato: dia/mes/a%co en numeros)\nFecha: ", 'ñ');
+            scanf("%10s", strfecha);
+            fflush(stdin);
+
+            str_to_fechames(&creditosbin[orden-1].date, strfecha);
+
+            if (creditosbin[orden-1].date.dia == 0 ||
+                creditosbin[orden-1].date.anio == 0 ||
+                strcmp(creditosbin[orden-1].date.mes, "---") == 0){
+                    printf("[!] Fecha invalida. Ingrese una fecha valida.\n");
+                }
+
+        } while (creditosbin[orden-1].date.dia == 0 ||
+                 creditosbin[orden-1].date.anio == 0 ||
+                 strcmp(creditosbin[orden-1].date.mes, "---") == 0);
+
+
+        //Varios valores numericos
+        creditosbin[orden-1].cuotas = (int) scan_num_range("Cuotas: ", 0, 999999);
+        creditosbin[orden-1].importe_cuota = (double) scan_num_range("Importe cuota: ", 0, 99999999);
+        creditosbin[orden-1].iva = (double) scan_num_range("IVA: ", 0, 99999999);
+        creditosbin[orden-1].total_cuota = (double) scan_num_range("Total cuota: ", 0, 99999999);
+        creditosbin[orden-1].activo = 1;
+
+
+        //Aca abre de nuevo el archivo y escribe todo el struct, luego lo cierra de nuevo
+        pArchivo = fopen("creditos.dat", "wb");
+        fwrite(creditosbin, sizeof(struct credito)*TABLE_MAX, 1, pArchivo);
+        fclose(pArchivo);
+
+        printf("Alta de credito en orden %d realizado con exito.\n", orden);
+    }
+}
+
+///BAJALOGICA: Funcion que da de baja a un credito (activo = 0;
 void baja_logica(char * arg1){
     if (!existe_bin()) return;
 
@@ -186,19 +310,17 @@ void baja_logica(char * arg1){
             return;
         }
 
-        pArchivo = fopen("creditos.dat", "wb");
-
         creditosbin[orden-1].activo = 0;
 
+        pArchivo = fopen("creditos.dat", "wb");
         fwrite(creditosbin, sizeof(struct credito)*TABLE_MAX, 1, pArchivo);
+        fclose(pArchivo);
 
         printf("Baja logica en orden %d realizado con exito.\n", orden);
-
-        fclose(pArchivo);
     }
 }
 
-//Funcion que borra completamente a un credito
+///BAJAFISICA: Funcion que borra completamente a un credito
 void baja_fisica(char *arg1){
     if (!existe_bin()) return;
 

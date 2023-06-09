@@ -4,8 +4,8 @@
 #include <string.h>
 #include <windows.h>
 
-#include "utils.h"
 #include "structs.h"
+#include "utils.h"
 #include "binfile.h"
 #include "csvfile.h"
 
@@ -25,7 +25,7 @@ int main(){
         printf("\n> ");
 
         //Lee la opcion
-        gets(input);
+        scanf("%32[^\n]", input);
         fflush(stdin);
         string_tolower(input, strlen(input));
         //Lo divide en comando y argumentos
@@ -60,6 +60,9 @@ int main(){
         }
         else if (strcmp(comando, "listarxyz") == 0){
             listar_xyz();
+        }
+        else if (strcmp(comando, "alta") == 0){
+            alta(arg1);
         }
         else if (strcmp(comando, "ayuda") == 0){
             printf("\n=====[ COMANDOS ]=====\n");

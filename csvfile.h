@@ -12,7 +12,7 @@ void listar_csv(char * arg1){
     //Si ARG1 es ingresado, lo usa como ruta de csv.
     if (arg1 == NULL){
         printf("Ingrese la ruta del archivo CSV a listar: \nRUTA>");
-        scanf("%s", ruta);
+        scanf("%32[^\n]", ruta);
         fflush(stdin);
     }
     else{
@@ -82,7 +82,7 @@ void importar_csv(char *arg1){
     //Si ARG1 es ingresado, lo usa como ruta de archivo csv
     if (arg1 == NULL){
         printf("Ingrese la ruta del archivo CSV a importar como creditos.dat: \nRUTA>");
-        scanf("%s", ruta);
+        scanf("%32[^\n]", ruta);
         fflush(stdin);
     }
     else{
@@ -91,7 +91,6 @@ void importar_csv(char *arg1){
 
     //Abre el archivo en solo lectura
     pArchivoCsv = fopen(ruta, "r");
-
 
     if (pArchivoCsv == NULL){
         printf("ERROR: El archivo no existe. Verificar ruta ingresada.\n");
