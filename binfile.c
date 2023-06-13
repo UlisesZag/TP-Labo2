@@ -47,6 +47,9 @@ void listar_tabla_creditos(struct credito creditosbin[], int d, int opcion, char
 void crear_creditosdat(){
     FILE * pArchivo;
 
+    struct credito creditosbin[TABLE_MAX];
+    inicializar_credito(creditosbin, TABLE_MAX);
+
     //Primero intenta abrirlo para ver si ya existe.
     pArchivo = fopen("creditos.dat", "rb");
 
@@ -62,6 +65,7 @@ void crear_creditosdat(){
         if (opcion == 'S'){
             //Crea el archivo vacio
             pArchivo = fopen("creditos.dat", "wb");
+            fwrite(creditosbin, sizeof(struct credito)*TABLE_MAX, 1, pArchivo);
             fclose(pArchivo);
             printf("Archivo \"creditos.dat\" vacio creado.\n\n");
         }
@@ -163,11 +167,6 @@ void alta(char * arg1){
     if (pArchivo != NULL){
         //Calcula el tamaño del archivo. Sale si el archivo esta vacio.
         int fsize = tamano_bin(pArchivo);
-        if (fsize == 0){
-            printf("El archivo \"creditos.dat\" esta vacio.\n");
-            fclose(pArchivo);
-            return;
-        }
 
         //Lee el archivo
         fseek(pArchivo, 0, SEEK_SET);
@@ -261,6 +260,136 @@ void alta(char * arg1){
         fclose(pArchivo);
 
         printf("Alta de credito en orden %d realizado con exito.\n", orden);
+    }
+}
+
+void modificar(char *arg1, char *arg2, char *arg3){
+    if (!existe_bin()) return;
+
+    FILE *pArchivo;
+    pArchivo = fopen("creditos.dat", "rb");
+
+    struct credito creditosbin[TABLE_MAX];
+    inicializar_credito(creditosbin, TABLE_MAX);
+
+    if (pArchivo != NULL){
+        //Calcula el tamaño del archivo. Sale si el archivo esta vacio.
+        int fsize = tamano_bin(pArchivo);
+
+        //Lee el archivo
+        fseek(pArchivo, 0, SEEK_SET);
+        fread(&creditosbin, sizeof(struct credito)*TABLE_MAX, 1, pArchivo);
+        fclose(pArchivo);
+
+        //Lee el numero de orden, ya sea por linea de comandos o por entrada aparte
+        //Orden
+        int orden;
+        if (arg1 == NULL){
+            printf("Ingrese el numero de orden del credito a modificar:\nORDEN> ");
+            scanf("%d", &orden);
+            fflush(stdin);
+        }
+        else{
+            sscanf(arg1, "%d", &orden);
+        }
+
+        if (orden < 1 || orden > TABLE_MAX){//SI EL VALOR ESTA FUERA DE RANGO
+            printf("[!] Orden ingresado fuera de rango. Ingrese un numero de orden valido.\n");
+            return;
+        }
+        if (creditosbin[orden-1].orden == 0){//SI EL CREDITO NO EXISTE
+            printf("[!] No existe un credito de orden %d. \n", orden);
+            return;
+        }
+
+        char opcion = '-';
+        if (arg2 == NULL){
+            printf("Que campo desea modificar?\n"
+                   "A: TIPO DE CREDITO\n"
+                   "B: IMPORTE\n"
+                   "OPCION>");
+            scanf("%c", &opcion);
+            fflush(stdin);
+            opcion = toupper(opcion);
+        }
+        else{
+            if (strcmp(arg2, "tipo") == 0) opcion = 'A';
+            if (strcmp(arg2, "importe") == 0) opcion = 'B';
+        }
+        //Opcion invalida?
+        if (opcion != 'A' && opcion != 'B'){
+            printf("[!] Opcion invalida. Ingrese una opcion valida. \n");
+            return;
+        }
+        //MODIFICAR TIPO?
+        if (opcion == 'A'){
+            char tipo;
+            if (arg3 == NULL){
+                printf("Que tipo?\n"
+                       "A: CON GARANTIA\n"
+                       "B: A SOLA FIRMA\n"
+                       "OPCION>");
+                scanf("%c", &opcion);
+                fflush(stdin);
+                tipo = toupper(opcion);
+            }
+            else{
+                if (strcmp(arg3, "garantia") == 0) tipo = 'A';
+                if (strcmp(arg3, "firma") == 0) tipo = 'B';
+            }
+
+            if (tipo != 'A' && tipo != 'B'){
+                printf("[!] Opcion invalida. Ingrese una opcion valida. \n");
+                return;
+            }
+
+            char confirmacion;
+            printf("Esta seguro que quiere modificar el credito? [S/N]\n");
+            scanf("%c", &confirmacion);
+            fflush(stdin);
+            confirmacion = toupper(confirmacion);
+
+            if (confirmacion == 'S'){
+                if (tipo == 'A') strcpy(creditosbin[orden-1].tipo, "CON GARANTIA");
+                if (tipo == 'B') strcpy(creditosbin[orden-1].tipo, "A SOLA FIRMA");
+                printf("Tipo de credito en orden %d modificado con exito.\n", orden);
+            }
+        }
+        //MODIFICAR IMPORTE?
+        if (opcion == 'B'){
+            float importe;
+            if (arg3 == NULL){
+                printf("Ingrese el importe: ");
+                scanf("%f", &importe);
+                fflush(stdin);
+            }
+            else{
+                string_changechar(arg3, strlen(arg3), ',', '.');
+                sscanf(arg3, "%f", &importe);
+            }
+
+            if (importe <= 0.000001f){
+                printf("[!] Importe invalido. \n");
+                return;
+            }
+
+            char confirmacion;
+            printf("Esta seguro que quiere modificar el credito? [S/N]\n");
+            scanf("%c", &confirmacion);
+            fflush(stdin);
+            confirmacion = toupper(confirmacion);
+
+            if (confirmacion == 'S'){
+                creditosbin[orden-1].importe = importe;
+                printf("Importe de credito en orden %d modificado con exito.\n", orden);
+            }
+        }
+
+
+        //Aca abre de nuevo el archivo y escribe todo el struct, luego lo cierra de nuevo
+        pArchivo = fopen("creditos.dat", "wb");
+        fwrite(creditosbin, sizeof(struct credito)*TABLE_MAX, 1, pArchivo);
+        fclose(pArchivo);
     }
 }
 

@@ -7,6 +7,7 @@ void crear_creditosdat();
 int existe_bin();
 void listar_bin(char *arg1, char *arg2);
 void alta(char * arg1);
+void modificar(char *arg1, char *arg2, char *arg3);
 void baja_logica(char * arg1);
 void baja_fisica(char *arg1);
 

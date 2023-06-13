@@ -31,12 +31,25 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="binfile.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="binfile.h" />
+		<Unit filename="csvfile.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="csvfile.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="structfuncs.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="structfuncs.h" />
 		<Unit filename="structs.h" />
+		<Unit filename="utils.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="utils.h" />
 		<Extensions>
 			<lib_finder disable_auto="1" />

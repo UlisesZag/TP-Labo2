@@ -195,13 +195,18 @@ void importar_csv(char *arg1){
 }
 
 //Lista el archivo XYZ
-void listar_xyz(){
-    char ruta[32];
+void listar_xyz(char *arg1){
+    char ruta[64];
     FILE * pArchivo;
 
-    printf("Ingrese la ruta del archivo XYZ a listar: \nRUTA>");
-    scanf("%s", ruta);
-    fflush(stdin);
+    if (arg1 == NULL){
+        printf("Ingrese la ruta del archivo XYZ a listar: \nRUTA>");
+        scanf("%64s", ruta);
+        fflush(stdin);
+    }
+    else{
+        strcpy(ruta, arg1);
+    }
 
     //Abre el archivo en solo lectura
     pArchivo = fopen(ruta, "r");
