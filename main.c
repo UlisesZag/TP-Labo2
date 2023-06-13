@@ -8,8 +8,7 @@
 #include "utils.h"
 #include "binfile.h"
 #include "csvfile.h"
-
-#define TABLE_MAX 32
+#include "defines.h"
 
 
 int main(){
@@ -17,7 +16,7 @@ int main(){
     char input[64];
     int salir = 0;
 
-    printf("================ [ GESTION DE CREDITOS v0.1 ] ================\n");
+    printf(ANSI_COLOR_YELLOW "================ [ GESTION DE CREDITOS v0.1 ] ================\n" ANSI_COLOR_RESET);
     existe_bin();
     printf("Ingrese \"ayuda\" para obtener una lista de comandos.\n");
 
@@ -40,6 +39,7 @@ int main(){
         arg1 = strtok_r(NULL, " ", &saveptr);
         arg2 = strtok_r(NULL, " ", &saveptr);
         arg3 = strtok_r(NULL, " ", &saveptr);
+
         if (comando != NULL){
             if (strcmp(comando, "nuevodat") == 0){
                 crear_creditosdat();
@@ -71,6 +71,9 @@ int main(){
             else if (strcmp(comando, "modificar") == 0){
                 modificar(arg1, arg2, arg3);
             }
+            else if (strcmp(comando, "buscar") == 0){
+                buscar(arg1, arg2, arg3);
+            }
             else if (strcmp(comando, "dfjk") == 0){
                 printf("osu!mania lol.\n");
             }
@@ -88,13 +91,18 @@ int main(){
                        "\t        - Si es \"firma\" muestra solo los del tipo \"A SOLA FIRMA\"\n"
                        "\t - modificar [orden][opcion][tipo/importe]: Modifica un campo de un credito por numero de orden.\n"
                        "\t    [orden]:  El numero de orden del credito a modificar.\n"
-                       "\t    [opcion]: El campo a modificar\n"
+                       "\t    [opcion]: El campo a modificar:\n"
                        "\t        - Si es \"tipo\" modifica el tipo de credito.\n"
                        "\t        - Si es \"importe\" modifica el importe del credito\n"
                        "\t    [tipo/importe]: El tipo de credito o el importe a asignar al credito.\n"
                        "\t        << SOLO PARA TIPO >>\n"
                        "\t        - Si es \"garantia\" modifica el tipo a \"CON GARANTIA\".\n"
                        "\t        - Si es \"firma\" modifica el tipo a \"A SOLA FIRMA\".\n"
+                       "\t - buscar [tipo][orden/apellido]: Busca un credito por numero de orden o apellido, e imprime sus datos.\n"
+                       "\t    [tipo]: El tipo de dato a buscar:\n"
+                       "\t        - Si es \"orden\" busca por el numero de orden\n"
+                       "\t        - Si es \"apellido\" busca por apellido\n"
+                       "\t    [orden/apellido]: El numero de orden o el apellido del credito a buscar.\n"
                        "\t - bajalogica [orden]: Dar de baja a un credito (usuario pasivo).\n"
                        "\t    [orden]:  El numero de orden del credito a dar de baja\n"
                        "\t - bajafisica [orden]: Borra a un credito de la tabla, y lo escribe en un archivo .xyz por fecha.\n"

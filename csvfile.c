@@ -6,10 +6,9 @@
 #include "structs.h"
 #include "structfuncs.h"
 #include "utils.h"
+#include "defines.h"
 
 #include "csvfile.h"
-
-#define TABLE_MAX 32
 
 //Lista un csv que ingrese el usuario
 void listar_csv(char * arg1){

@@ -5,6 +5,7 @@
 #include <time.h>
 
 #include "structs.h"
+#include "defines.h"
 
 #include "utils.h"
 

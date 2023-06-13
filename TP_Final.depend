@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1686691099 source:c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\main.c
+1686696076 source:c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\main.c
 	<stdio.h>
 	<stdlib.h>
 	<ctype.h>
@@ -9,6 +9,7 @@
 	"utils.h"
 	"binfile.h"
 	"csvfile.h"
+	"defines.h"
 
 1686314730 c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\structs.h
 
@@ -19,11 +20,11 @@
 
 1686319089 c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\csvfile.h
 
-1686613150 c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\binfile.h
+1686695120 c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\binfile.h
 
 1686313188 c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\utils.h
 
-1686691120 source:c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\csvfile.c
+1686696036 source:c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\csvfile.c
 	<stdio.h>
 	<stdlib.h>
 	<ctype.h>
@@ -31,18 +32,20 @@
 	"structs.h"
 	"structfuncs.h"
 	"utils.h"
+	"defines.h"
 	"csvfile.h"
 
-1686319405 source:c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\utils.c
+1686696040 source:c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\utils.c
 	<stdio.h>
 	<stdlib.h>
 	<ctype.h>
 	<windows.h>
 	<time.h>
 	"structs.h"
+	"defines.h"
 	"utils.h"
 
-1686691114 source:c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\binfile.c
+1686696027 source:c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\binfile.c
 	<stdio.h>
 	<stdlib.h>
 	<ctype.h>
@@ -50,6 +53,7 @@
 	"structs.h"
 	"structfuncs.h"
 	"utils.h"
+	"defines.h"
 	"binfile.h"
 
 1686315019 source:c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\structfuncs.c
@@ -60,4 +64,6 @@
 	"structfuncs.h"
 
 1686314591 c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\structfuncs.h
+
+1686695982 c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\defines.h
 

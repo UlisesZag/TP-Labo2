@@ -6,10 +6,9 @@
 #include "structs.h"
 #include "structfuncs.h"
 #include "utils.h"
+#include "defines.h"
 
 #include "binfile.h"
-
-#define TABLE_MAX 32
 
 //Funcion que saca el tamaño del archivo
 //SIEMPRE se deberia ejecutar al principio de la funcion, y no mientras se esta moviendo pArchivo
@@ -134,7 +133,7 @@ void listar_bin(char *arg1, char *arg2){
             }
             else{
                 char tipo_c;
-                printf("Ingrese el tipo de firma:\nA: CON GARANTIA\nB: A SOLA FIRMA\nTIPO> ");
+                printf("Ingrese el tipo de credito:\nA: CON GARANTIA\nB: A SOLA FIRMA\nTIPO> ");
                 scanf("%c", &tipo_c);
                 fflush(stdin);
                 tipo_c = toupper(tipo_c);
@@ -389,6 +388,167 @@ void modificar(char *arg1, char *arg2, char *arg3){
         //Aca abre de nuevo el archivo y escribe todo el struct, luego lo cierra de nuevo
         pArchivo = fopen("creditos.dat", "wb");
         fwrite(creditosbin, sizeof(struct credito)*TABLE_MAX, 1, pArchivo);
+        fclose(pArchivo);
+    }
+}
+
+///BUSCAR: Funcion que busca un dato por orden o apellido, e imprime todos los datos.
+void buscar(char *arg1, char *arg2, char *arg3){
+    if (!existe_bin()) return;
+
+    FILE *pArchivo;
+    pArchivo = fopen("creditos.dat", "rb");
+
+    struct credito creditosbin[TABLE_MAX];
+    inicializar_credito(creditosbin, TABLE_MAX);
+
+    if (pArchivo != NULL){
+        //Calcula el tamaño del archivo. Sale si el archivo esta vacio.
+        int fsize = tamano_bin(pArchivo);
+        if (fsize == 0){
+            printf("El archivo \"creditos.dat\" esta vacio.\n");
+            fclose(pArchivo);
+            return;
+        }
+
+        int registros = fsize/sizeof(struct credito);
+
+        //Lee el archivo
+        fseek(pArchivo, 0, SEEK_SET);
+        fread(&creditosbin, sizeof(struct credito)*TABLE_MAX, 1, pArchivo);
+
+        int opcion = 0;
+        //Tipo de dato a usar para buscar
+        if (arg1 != NULL){
+            if (strcmp(arg1, "orden") == 0) opcion = 1;
+            if (strcmp(arg1, "apellido") == 0) opcion = 2;
+        }
+        else{
+            printf("Ingrese el tipo de dato para buscar el credito:\n"
+                   "1: Numero de orden; 2: Apellido.\n"
+                   "TIPO>");
+            scanf("%d", &opcion);
+            fflush(stdin);
+        }
+        if (opcion != 1 && opcion != 2){
+            printf("[!] Opcion invalida. Ingrese una opcion valida.\n");
+            return;
+        }
+
+        //Si es por numero de orden:
+        if (opcion == 1){
+            int orden = -1;
+            if (arg2 != NULL){
+                sscanf(arg2, "%d", &orden);
+            }
+            else{
+                printf("Ingrese el numero de orden:\n"
+                       "ORDEN> ");
+                scanf("%d", &orden);
+                fflush(stdin);
+            }
+            //Validacion
+            if (orden < 1 || orden > TABLE_MAX){//SI EL VALOR ESTA FUERA DE RANGO
+            printf("[!] Orden ingresado fuera de rango. Ingrese un numero de orden valido.\n");
+            return;
+            }
+            if (creditosbin[orden-1].orden == 0){//SI EL CREDITO NO EXISTE
+                printf("[!] No existe un credito de orden %d. \n", orden);
+                return;
+            }
+
+            //Ahora si busca el credito por numero de orden
+            printf("----- DATOS DEL CREDITO -----\n"
+                   "Orden: %d\n"
+                   "Apellido: %s\n"
+                   "Nombre: %s\n"
+                   "Importe: %.2f\n"
+                   "Tipo de credito: %s\n"
+                   "Fecha: %02d/%s/%04d\n"
+                   "Cuotas: %d\n"
+                   "Importe de la cuota: %.2f\n"
+                   "IVA: %.2f\n"
+                   "Total de la cuota: %.2f\n"
+                   "Activo: %d\n",
+                   creditosbin[orden-1].orden,
+                   creditosbin[orden-1].apellido,
+                   creditosbin[orden-1].nombre,
+                   creditosbin[orden-1].importe,
+                   creditosbin[orden-1].tipo,
+                   creditosbin[orden-1].date.dia,
+                   creditosbin[orden-1].date.mes,
+                   creditosbin[orden-1].date.anio,
+                   creditosbin[orden-1].cuotas,
+                   creditosbin[orden-1].importe_cuota,
+                   creditosbin[orden-1].iva,
+                   creditosbin[orden-1].total_cuota,
+                   creditosbin[orden-1].activo
+                   );
+        }
+        //Si es por apellido
+        if (opcion == 2){
+            int orden = -1;
+            char apellido[33];
+
+            if (arg2 != NULL){
+                strcpy(apellido, arg2);
+                //Procrastinacion: Esto es horrible, lo voy a arreglar despues
+                if (arg3 != NULL){
+                    strcat(apellido, " ");
+                    strcat(apellido, arg3);
+                }
+            }
+            else{
+                printf("Ingrese el apellido:\n"
+                       "APELLIDO> ");
+                scanf("%32[^\n]", apellido);
+                fflush(stdin);
+            }
+
+            string_toupper(apellido, strlen(apellido));
+
+            //Busca el orden por apellido
+            for (int i = 0; i < TABLE_MAX; i++){
+                if (strcmp(creditosbin[i].apellido, apellido) == 0){
+                    orden = i;
+                    break;
+                }
+            }
+            if (orden < 0){
+                printf("[!] No se pudo encontrar un credito con ese apellido.\n");
+                return;
+            }
+
+            //Si encontro el credito lo imprime
+            printf("----- DATOS DEL CREDITO -----\n"
+                   "Orden: %d\n"
+                   "Apellido: %s\n"
+                   "Nombre: %s\n"
+                   "Importe: %.2f\n"
+                   "Tipo de credito: %s\n"
+                   "Fecha: %02d/%s/%04d\n"
+                   "Cuotas: %d\n"
+                   "Importe de la cuota: %.2f\n"
+                   "IVA: %.2f\n"
+                   "Total de la cuota: %.2f\n"
+                   "Activo: %d\n",
+                   creditosbin[orden].orden,
+                   creditosbin[orden].apellido,
+                   creditosbin[orden].nombre,
+                   creditosbin[orden].importe,
+                   creditosbin[orden].tipo,
+                   creditosbin[orden].date.dia,
+                   creditosbin[orden].date.mes,
+                   creditosbin[orden].date.anio,
+                   creditosbin[orden].cuotas,
+                   creditosbin[orden].importe_cuota,
+                   creditosbin[orden].iva,
+                   creditosbin[orden].total_cuota,
+                   creditosbin[orden].activo
+                   );
+        }
+
+
         fclose(pArchivo);
     }
 }
