@@ -39,8 +39,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="csvfile.h" />
+		<Unit filename="defines.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
+			<Option compiler="gcc" use="0" buildCommand="g++ cpp_interactive_terminal.cpp -o cpp_interactive_terminal.cgi\nchmod +x cpp_interactive_terminal.cgi\n./cpp_interactive_terminal.cgi" />
 		</Unit>
 		<Unit filename="structfuncs.c">
 			<Option compilerVar="CC" />

@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1686696076 source:c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\main.c
+1686697073 source:c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\main.c
 	<stdio.h>
 	<stdlib.h>
 	<ctype.h>
@@ -24,7 +24,7 @@
 
 1686313188 c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\utils.h
 
-1686696036 source:c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\csvfile.c
+1686698261 source:c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\csvfile.c
 	<stdio.h>
 	<stdlib.h>
 	<ctype.h>
@@ -35,7 +35,7 @@
 	"defines.h"
 	"csvfile.h"
 
-1686696040 source:c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\utils.c
+1686699502 source:c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\utils.c
 	<stdio.h>
 	<stdlib.h>
 	<ctype.h>
@@ -45,7 +45,7 @@
 	"defines.h"
 	"utils.h"
 
-1686696027 source:c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\binfile.c
+1686698148 source:c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\binfile.c
 	<stdio.h>
 	<stdlib.h>
 	<ctype.h>

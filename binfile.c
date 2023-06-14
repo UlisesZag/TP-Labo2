@@ -21,7 +21,9 @@ int tamano_bin(FILE * pArchivo){
 
 //Funcion que muestra la tabla de creditos, con filtros segun opcion y "tipo"
 void listar_tabla_creditos(struct credito creditosbin[], int d, int opcion, char tipo[]){
+    set_text_color(15);
     printf("ORD | APELLIDO  | NOMBRE  | IMPORTE  | TIPO DE CREDITO | FECHA      | CUOTAS | IMPORTE CUOTA | IVA   | TOTAL CUOTA | ACTIVO\n");
+    set_text_color(7);
     for (int i = 0; i < d; i++){
         if (opcion == 1 && creditosbin[i].activo == 0) continue; //Si la opcion es solo los activos, no imprimir los inactivos
         if (opcion == 2 && strcmp(creditosbin[i].tipo, tipo) != 0) continue; //Si la opcion es solo los activos, no imprimir los inactivos
@@ -54,7 +56,10 @@ void crear_creditosdat(){
 
     if (pArchivo != NULL) {
         //En este caso existe, le pregunta al usuario si quiere crear un archivo en blanco
-        printf("Ya existe un archivo \"creditos.dat\". Desea sobreescribirlo con un archivo en blanco?\n[S/N]>");
+        set_text_color(14);
+        printf("Ya existe un archivo \"creditos.dat\". Desea sobreescribirlo con un archivo en blanco?\n");
+        set_text_color(7);
+        printf("[S/N]>");
 
         char opcion;
         scanf("%c", &opcion);
@@ -66,14 +71,21 @@ void crear_creditosdat(){
             pArchivo = fopen("creditos.dat", "wb");
             fwrite(creditosbin, sizeof(struct credito)*TABLE_MAX, 1, pArchivo);
             fclose(pArchivo);
+
+            set_text_color(10);
             printf("Archivo \"creditos.dat\" vacio creado.\n\n");
+            set_text_color(7);
         }
     }
     else{
         //Crea el archivo vacio
         pArchivo = fopen("creditos.dat", "wb");
+        fwrite(creditosbin, sizeof(struct credito)*TABLE_MAX, 1, pArchivo);
         fclose(pArchivo);
-        printf("Archivo \"creditos.dat\" vacio creado.\n\n");
+
+        set_text_color(10);
+        printf("Archivo \"creditos.dat\" vacio creado.\n");
+        set_text_color(7);
     }
 }
 
@@ -87,7 +99,9 @@ int existe_bin(){
         return 1;
     }
     else{
-        printf("[!] No existe un archivo \"creditos.bin\". Cree uno con \"nuevodat\" o importe un CSV con \"importarcsv\".\n\n");
+        set_text_color(12);
+        printf("[!] No existe un archivo \"creditos.dat\". Cree uno con \"nuevodat\" o importe un CSV con \"importarcsv\".\n\n");
+        set_text_color(7);
         return 0;
     }
 }
@@ -141,7 +155,9 @@ void listar_bin(char *arg1, char *arg2){
                 if (tipo_c == 'A') strcpy(tipo, "CON GARANTIA");
                 else if (tipo_c == 'B') strcpy(tipo, "A SOLA FIRMA");
                 else{
+                    set_text_color(12);
                     printf("[!] Tipo de credito invalido.");
+                    set_text_color(7);
                     fclose(pArchivo);
                     return;
                 }
@@ -173,7 +189,9 @@ void alta(char * arg1){
         fclose(pArchivo);
 
         //Lee el numero de orden, ya sea por linea de comandos o por entrada aparte
+        set_text_color(11);
         printf("----- DAR NUEVA ALTA -----\n");
+        set_text_color(7);
         //Orden
         int orden;
         if (arg1 == NULL){
@@ -186,11 +204,15 @@ void alta(char * arg1){
         }
 
         if (orden < 1 || orden > TABLE_MAX){//SI EL VALOR ESTA FUERA DE RANGO
+            set_text_color(12);
             printf("[!] Orden ingresado fuera de rango. Ingrese un numero de orden valido.\n");
+            set_text_color(7);
             return;
         }
         if (creditosbin[orden-1].orden != 0){//SI EL CREDITO NO EXISTE
+            set_text_color(12);
             printf("[!] Ya existe un credito de orden %d. Elija otro.\n", orden);
+            set_text_color(7);
             return;
         }
 
@@ -217,8 +239,11 @@ void alta(char * arg1){
             fflush(stdin);
             tipo_c = toupper(tipo_c);
 
-            if (tipo_c != 'A' && tipo_c != 'B')
+            if (tipo_c != 'A' && tipo_c != 'B'){
+                set_text_color(12);
                 printf("[!] Tipo de credito invalido. Ingrese un tipo de credito valido.\n");
+                set_text_color(7);
+            }
         } while (tipo_c != 'A' && tipo_c != 'B');
 
         if (tipo_c == 'A') strcpy(creditosbin[orden-1].tipo, "CON GARANTIA");
@@ -237,7 +262,9 @@ void alta(char * arg1){
             if (creditosbin[orden-1].date.dia == 0 ||
                 creditosbin[orden-1].date.anio == 0 ||
                 strcmp(creditosbin[orden-1].date.mes, "---") == 0){
+                    set_text_color(12);
                     printf("[!] Fecha invalida. Ingrese una fecha valida.\n");
+                    set_text_color(7);
                 }
 
         } while (creditosbin[orden-1].date.dia == 0 ||
@@ -258,7 +285,9 @@ void alta(char * arg1){
         fwrite(creditosbin, sizeof(struct credito)*TABLE_MAX, 1, pArchivo);
         fclose(pArchivo);
 
+        set_text_color(10);
         printf("Alta de credito en orden %d realizado con exito.\n", orden);
+        set_text_color(7);
     }
 }
 
@@ -293,11 +322,15 @@ void modificar(char *arg1, char *arg2, char *arg3){
         }
 
         if (orden < 1 || orden > TABLE_MAX){//SI EL VALOR ESTA FUERA DE RANGO
+            set_text_color(12);
             printf("[!] Orden ingresado fuera de rango. Ingrese un numero de orden valido.\n");
+            set_text_color(7);
             return;
         }
         if (creditosbin[orden-1].orden == 0){//SI EL CREDITO NO EXISTE
+            set_text_color(12);
             printf("[!] No existe un credito de orden %d. \n", orden);
+            set_text_color(7);
             return;
         }
 
@@ -317,7 +350,9 @@ void modificar(char *arg1, char *arg2, char *arg3){
         }
         //Opcion invalida?
         if (opcion != 'A' && opcion != 'B'){
+            set_text_color(12);
             printf("[!] Opcion invalida. Ingrese una opcion valida. \n");
+            set_text_color(7);
             return;
         }
         //MODIFICAR TIPO?
@@ -338,7 +373,9 @@ void modificar(char *arg1, char *arg2, char *arg3){
             }
 
             if (tipo != 'A' && tipo != 'B'){
+                set_text_color(12);
                 printf("[!] Opcion invalida. Ingrese una opcion valida. \n");
+                set_text_color(7);
                 return;
             }
 
@@ -351,7 +388,9 @@ void modificar(char *arg1, char *arg2, char *arg3){
             if (confirmacion == 'S'){
                 if (tipo == 'A') strcpy(creditosbin[orden-1].tipo, "CON GARANTIA");
                 if (tipo == 'B') strcpy(creditosbin[orden-1].tipo, "A SOLA FIRMA");
+                set_text_color(10);
                 printf("Tipo de credito en orden %d modificado con exito.\n", orden);
+                set_text_color(7);
             }
         }
         //MODIFICAR IMPORTE?
@@ -368,7 +407,9 @@ void modificar(char *arg1, char *arg2, char *arg3){
             }
 
             if (importe <= 0.000001f){
+                set_text_color(12);
                 printf("[!] Importe invalido. \n");
+                set_text_color(7);
                 return;
             }
 
@@ -380,7 +421,9 @@ void modificar(char *arg1, char *arg2, char *arg3){
 
             if (confirmacion == 'S'){
                 creditosbin[orden-1].importe = importe;
+                set_text_color(10);
                 printf("Importe de credito en orden %d modificado con exito.\n", orden);
+                set_text_color(7);
             }
         }
 
@@ -406,7 +449,9 @@ void buscar(char *arg1, char *arg2, char *arg3){
         //Calcula el tamaño del archivo. Sale si el archivo esta vacio.
         int fsize = tamano_bin(pArchivo);
         if (fsize == 0){
+            set_text_color(14);
             printf("El archivo \"creditos.dat\" esta vacio.\n");
+            set_text_color(7);
             fclose(pArchivo);
             return;
         }
@@ -431,7 +476,9 @@ void buscar(char *arg1, char *arg2, char *arg3){
             fflush(stdin);
         }
         if (opcion != 1 && opcion != 2){
+            set_text_color(12);
             printf("[!] Opcion invalida. Ingrese una opcion valida.\n");
+            set_text_color(7);
             return;
         }
 
@@ -449,16 +496,23 @@ void buscar(char *arg1, char *arg2, char *arg3){
             }
             //Validacion
             if (orden < 1 || orden > TABLE_MAX){//SI EL VALOR ESTA FUERA DE RANGO
-            printf("[!] Orden ingresado fuera de rango. Ingrese un numero de orden valido.\n");
-            return;
+                set_text_color(12);
+                printf("[!] Orden ingresado fuera de rango. Ingrese un numero de orden valido.\n");
+                set_text_color(7);
+                return;
             }
             if (creditosbin[orden-1].orden == 0){//SI EL CREDITO NO EXISTE
+                set_text_color(12);
                 printf("[!] No existe un credito de orden %d. \n", orden);
+                set_text_color(7);
                 return;
             }
 
             //Ahora si busca el credito por numero de orden
-            printf("----- DATOS DEL CREDITO -----\n"
+            set_text_color(11);
+            printf("----- DATOS DEL CREDITO -----\n");
+            set_text_color(7);
+            printf(
                    "Orden: %d\n"
                    "Apellido: %s\n"
                    "Nombre: %s\n"
@@ -515,12 +569,17 @@ void buscar(char *arg1, char *arg2, char *arg3){
                 }
             }
             if (orden < 0){
+                set_text_color(12);
                 printf("[!] No se pudo encontrar un credito con ese apellido.\n");
+                set_text_color(7);
                 return;
             }
 
             //Si encontro el credito lo imprime
-            printf("----- DATOS DEL CREDITO -----\n"
+            set_text_color(11);
+            printf("----- DATOS DEL CREDITO -----\n");
+            set_text_color(7);
+            printf(
                    "Orden: %d\n"
                    "Apellido: %s\n"
                    "Nombre: %s\n"
@@ -567,7 +626,9 @@ void baja_logica(char * arg1){
         //Calcula el tamaño del archivo. Sale si el archivo esta vacio.
         int fsize = tamano_bin(pArchivo);
         if (fsize == 0){
+            set_text_color(14);
             printf("El archivo \"creditos.dat\" esta vacio.\n");
+            set_text_color(7);
             fclose(pArchivo);
             return;
         }
@@ -590,19 +651,25 @@ void baja_logica(char * arg1){
 
         //SI EL VALOR ESTA FUERA DE RANGO
         if (orden < 1 || orden > TABLE_MAX){
+            set_text_color(12);
             printf("[!] Orden ingresado fuera de rango. Ingrese un numero de orden valido.\n");
+            set_text_color(7);
             return;
         }
 
         //SI EL CREDITO NO EXISTE
         if (creditosbin[orden-1].orden == 0){
+            set_text_color(12);
             printf("[!] No existe un credito en el orden %d.\n", orden);
+            set_text_color(7);
             return;
         }
 
         //SI EL CREDITO YA ES PASIVO
         if (creditosbin[orden-1].activo == 0){
+            set_text_color(12);
             printf("[!] El credito con orden %d no es activo.\n", orden);
+            set_text_color(7);
             return;
         }
 
@@ -612,7 +679,9 @@ void baja_logica(char * arg1){
         fwrite(creditosbin, sizeof(struct credito)*TABLE_MAX, 1, pArchivo);
         fclose(pArchivo);
 
+        set_text_color(10);
         printf("Baja logica en orden %d realizado con exito.\n", orden);
+        set_text_color(7);
     }
 }
 
@@ -631,7 +700,9 @@ void baja_fisica(char *arg1){
         //Calcula el tamaño del archivo. Sale si el archivo esta vacio.
         int fsize = tamano_bin(pArchivo);
         if (fsize == 0){
+            set_text_color(14);
             printf("El archivo \"creditos.dat\" esta vacio.\n");
+            set_text_color(7);
             fclose(pArchivo);
             return;
         }
@@ -654,13 +725,17 @@ void baja_fisica(char *arg1){
 
         //SI EL VALOR ESTA FUERA DE RANGO
         if (orden < 1 || orden > TABLE_MAX){
+            set_text_color(12);
             printf("[!] Orden ingresado fuera de rango. Ingrese un numero de orden valido.\n");
+            set_text_color(7);
             return;
         }
 
         //SI EL CREDITO NO EXISTE
         if (creditosbin[orden-1].orden == 0){
+            set_text_color(12);
             printf("[!] No existe un credito en el orden %d.\n", orden);
+            set_text_color(7);
             return;
         }
 
@@ -706,7 +781,9 @@ void baja_fisica(char *arg1){
 
         fwrite(creditosbin, sizeof(struct credito)*TABLE_MAX, 1, pArchivo);
 
+        set_text_color(10);
         printf("Baja fisica en orden %d realizado con exito.\n", orden);
+        set_text_color(7);
 
         fclose(pArchivo);
         fclose(pArchivoXyz);

@@ -16,7 +16,9 @@ int main(){
     char input[64];
     int salir = 0;
 
-    printf(ANSI_COLOR_YELLOW "================ [ GESTION DE CREDITOS v0.1 ] ================\n" ANSI_COLOR_RESET);
+    set_text_color(11);
+    printf("================ [ GESTION DE CREDITOS v0.1 ] ================\n");
+    set_text_color(7);
     existe_bin();
     printf("Ingrese \"ayuda\" para obtener una lista de comandos.\n");
 
@@ -78,7 +80,11 @@ int main(){
                 printf("osu!mania lol.\n");
             }
             else if (strcmp(comando, "ayuda") == 0){
-                printf("\n===== [ COMANDOS ] =====\n"
+                set_text_color(11);
+                printf("\n===== [ COMANDOS ] =====\n");
+                set_text_color(7);
+
+                printf(
                        "- Tabla de creditos: -------------------------------------------------------------------------------------\n"
                        "\t - nuevodat: Crear nuevo archivo \"creditos.bin\"\n"
                        "\t - listar [opcion][tipo]: Listar todos los creditos.\n"

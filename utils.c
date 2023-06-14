@@ -91,3 +91,10 @@ void str_to_fechames(struct fecha_mes * date, char * str_date){
     strcpy(date->mes, mes_str);
     date->anio = anio_num;
 }
+
+//Funcion que cambia el texto de color
+void set_text_color(int color){
+    HANDLE  hConsole;
+    hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, color);
+}

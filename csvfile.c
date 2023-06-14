@@ -30,14 +30,18 @@ void listar_csv(char * arg1){
     pArchivo = fopen(ruta, "r");
 
     if (pArchivo == NULL){
-        printf("ERROR: El archivo no existe. Verificar ruta ingresada.\n");
+        set_text_color(12);
+        printf("[!] El archivo no existe. Verificar ruta ingresada.\n");
+        set_text_color(7);
     }
     else{
         //Lee el csv por lineas
         char linea[2048];
         int pos = 0;
 
+        set_text_color(15);
         printf("Ord  Nombre y apellido  Importe    Tipo        Fecha        Cuotas  Imp. Cuota  IVA     Total Cuota\n");
+        set_text_color(7);
 
         fgets(linea, 2048, pArchivo);
         fgets(linea, 2048, pArchivo);//Lee la primera linea para pasar directamente a la segunda.
@@ -100,14 +104,19 @@ void importar_csv(char *arg1){
     pArchivoCsv = fopen(ruta, "r");
 
     if (pArchivoCsv == NULL){
-        printf("ERROR: El archivo no existe. Verificar ruta ingresada.\n");
+        set_text_color(12);
+        printf("[!] El archivo no existe. Verificar ruta ingresada.\n");
+        set_text_color(7);
     }
     else{
         //Antes de nada verifica si creditos.dat existe, si es asi le preguna al usuario si quiere reescribir,
         pArchivoBin = fopen("creditos.dat", "rb");
         if (pArchivoBin != NULL) {
             //En este caso existe, le pregunta al usuario si quiere crear un archivo en blanco
-            printf("Ya existe un archivo \"creditos.dat\". Desea sobreescribirlo con los datos del CSV?\n[S/N]>");
+            set_text_color(14);
+            printf("Ya existe un archivo \"creditos.dat\". Desea sobreescribirlo con los datos del CSV?\n");
+            set_text_color(7);
+            printf("[S/N]>");
 
             char opcion;
             scanf("%c", &opcion);
@@ -187,7 +196,10 @@ void importar_csv(char *arg1){
 
         fwrite(creditosbin, sizeof(struct credito)*TABLE_MAX, 1, pArchivoBin);
         fclose(pArchivoBin);
+
+        set_text_color(10);
         printf("Conversion de \"%s\" a \"creditos.dat\" exitosa (%d creditos cargados).\n", ruta, pos);
+        set_text_color(7);
     }
 
     fclose(pArchivoCsv);
@@ -211,7 +223,9 @@ void listar_xyz(char *arg1){
     pArchivo = fopen(ruta, "r");
 
     if (pArchivo == NULL){
+        set_text_color(12);
         printf("ERROR: El archivo no existe. Verificar ruta ingresada.\n");
+        set_text_color(7);
     }
     else{
         char linea[2048];
