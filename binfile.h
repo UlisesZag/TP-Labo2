@@ -2,10 +2,10 @@
 #define _BINFILE_H_
 
 int tamano_bin(FILE * pArchivo);
-void listar_tabla_creditos(struct credito creditosbin[], int d, int opcion, char tipo[]);
+void listar_tabla_creditos(struct credito creditosbin[], int d, int opcion, char tipo[], struct fecha fecha1, struct fecha fecha2);
 void crear_creditosdat();
 int existe_bin();
-void listar_bin(char *arg1, char *arg2);
+void listar_bin(char *arg1, char *arg2, char *arg3);
 void alta(char * arg1);
 void modificar(char *arg1, char *arg2, char *arg3);
 void buscar(char *arg1, char *arg2, char *arg3);

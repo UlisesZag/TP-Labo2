@@ -20,13 +20,23 @@ int tamano_bin(FILE * pArchivo){
 }
 
 //Funcion que muestra la tabla de creditos, con filtros segun opcion y "tipo"
-void listar_tabla_creditos(struct credito creditosbin[], int d, int opcion, char tipo[]){
+void listar_tabla_creditos(struct credito creditosbin[], int d, int opcion, char tipo[], struct fecha fecha1, struct fecha fecha2){
     set_text_color(15);
     printf("ORD | APELLIDO  | NOMBRE  | IMPORTE  | TIPO DE CREDITO | FECHA      | CUOTAS | IMPORTE CUOTA | IVA   | TOTAL CUOTA | ACT \n");
     set_text_color(7);
+
     for (int i = 0; i < d; i++){
         if (opcion == 1 && creditosbin[i].activo == 0) continue; //Si la opcion es solo los activos, no imprimir los inactivos
         if (opcion == 2 && strcmp(creditosbin[i].tipo, tipo) != 0) continue; //Si la opcion es solo los activos, no imprimir los inactivos
+
+        //Filtro por fecha
+        if (opcion == 3){
+            struct fecha fecha_credito;
+            fechames_to_fecha(creditosbin[i].date, &fecha_credito);
+            if (!(fechacmp(fecha_credito, fecha1) >= 0 && fechacmp(fecha_credito, fecha2) <= 0))
+                continue;
+        }
+
         printf("%-3d  %-11s %-10s %9.2f %17s  %02d/%3s/%04d %8d %14.2lf %8.2lf %13.2lf %3d\n",
                 creditosbin[i].orden,
                 creditosbin[i].apellido,
@@ -107,7 +117,7 @@ int existe_bin(){
 }
 
 ///LISTAR: Funcion que muestra los archivos de creditos.dat
-void listar_bin(char *arg1, char *arg2){
+void listar_bin(char *arg1, char *arg2, char *arg3){
     if (!existe_bin()) return;
 
     FILE *pArchivo;
@@ -133,9 +143,11 @@ void listar_bin(char *arg1, char *arg2){
 
         int opcion = 0; //Filtros de listado
         char tipo[32];
+        struct fecha fecha1, fecha2;
         if (arg1 != NULL){
             if (strcmp(arg1, "activos") == 0) opcion = 1;
             if (strcmp(arg1, "tipo") == 0) opcion = 2;
+            if (strcmp(arg1, "fecha") == 0) opcion = 3;
         }
 
         if (opcion == 2){
@@ -163,7 +175,68 @@ void listar_bin(char *arg1, char *arg2){
                 }
             }
         }
-        listar_tabla_creditos(creditosbin, registros, opcion, tipo);
+
+        if (opcion == 3){
+            //Fecha 1
+            if (arg2 != NULL){
+                str_to_fecha(&fecha1, arg2);
+                if (!fecha_valida(fecha1)){
+                    set_text_color(12);
+                    printf("[!] Fecha inicial invalida (mas dias de los que tiene el mes? o mas meses de los que tiene el año?).ºn");
+                    set_text_color(7);
+                    fclose(pArchivo);
+                    return;
+                }
+            }
+            else{
+                set_text_color(15);
+                printf("FECHA INICIAL:\n");
+                set_text_color(7);
+                scan_fecha(&fecha1);
+                if (!fecha_valida(fecha1)){
+                    set_text_color(12);
+                    printf("[!] Fecha inicial invalida (mas dias de los que tiene el mes? o mas meses de los que tiene el año?).\n");
+                    set_text_color(7);
+                    fclose(pArchivo);
+                    return;
+                }
+            }
+
+            //Fecha 2
+            if (arg3 != NULL){
+                str_to_fecha(&fecha2, arg3);
+                if (!fecha_valida(fecha2)){
+                    set_text_color(12);
+                    printf("[!] Fecha final invalida (mas dias de los que tiene el mes? o mas meses de los que tiene el año?).\n");
+                    set_text_color(7);
+                    fclose(pArchivo);
+                    return;
+                }
+            }
+            else{
+                set_text_color(15);
+                printf("FECHA FINAL:\n");
+                set_text_color(7);
+                scan_fecha(&fecha2);
+                if (!fecha_valida(fecha2)){
+                    set_text_color(12);
+                    printf("[!] Fecha final invalida (mas dias de los que tiene el mes? o mas meses de los que tiene el año?).\n");
+                    set_text_color(7);
+                    fclose(pArchivo);
+                    return;
+                }
+            }
+
+            //Se fija si fecha 1 < fecha 2
+            if (fechacmp(fecha1, fecha2) == 1){
+                set_text_color(12);
+                printf("[!] La fecha inicial es mayor a la fecha final.\n");
+                set_text_color(7);
+                fclose(pArchivo);
+                return;
+            }
+        }
+        listar_tabla_creditos(creditosbin, registros, opcion, tipo, fecha1, fecha2);
 
         fclose(pArchivo);
     }

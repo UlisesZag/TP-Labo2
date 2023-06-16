@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1686697073 source:c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\main.c
+1686950278 source:c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\main.c
 	<stdio.h>
 	<stdlib.h>
 	<ctype.h>
@@ -20,7 +20,7 @@
 
 1686319089 c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\csvfile.h
 
-1686695120 c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\binfile.h
+1686951774 c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\binfile.h
 
 1686950013 c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\utils.h
 
@@ -35,7 +35,7 @@
 	"defines.h"
 	"csvfile.h"
 
-1686699502 source:c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\utils.c
+1686950041 source:c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\utils.c
 	<stdio.h>
 	<stdlib.h>
 	<ctype.h>
@@ -45,7 +45,7 @@
 	"defines.h"
 	"utils.h"
 
-1686946640 source:c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\binfile.c
+1686954008 source:c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\binfile.c
 	<stdio.h>
 	<stdlib.h>
 	<ctype.h>
@@ -56,14 +56,14 @@
 	"defines.h"
 	"binfile.h"
 
-1686315019 source:c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\structfuncs.c
+1686954305 source:c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\structfuncs.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 	"structs.h"
 	"structfuncs.h"
 
-1686950027 c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\structfuncs.h
+1686954333 c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\structfuncs.h
 
 1686695982 c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\defines.h
 

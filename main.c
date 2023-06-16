@@ -50,7 +50,7 @@ int main(){
                 salir = 1;
             }
             else if (strcmp(comando, "listar") == 0){
-                listar_bin(arg1, arg2);
+                listar_bin(arg1, arg2, arg3);
             }
             else if (strcmp(comando, "listarcsv") == 0){
                 listar_csv(arg1);
