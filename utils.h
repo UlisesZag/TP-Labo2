@@ -11,6 +11,6 @@ void get_date_string(char str[], char separator);
 
 float scan_num_range(char prompt[], float minimo, float maximo);
 
-void str_to_fechames(struct fecha_mes * date, char * str_date);
+void set_text_color(int color);
 
 #endif // _UTILS_H_

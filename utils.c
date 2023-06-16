@@ -58,40 +58,6 @@ float scan_num_range(char prompt[], float minimo, float maximo){
     return num;
 }
 
-void str_to_fechames(struct fecha_mes * date, char * str_date){
-    char meses[12][4] = {"ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"};
-    int dias_meses[12] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-
-    //No uso sscanf porque puede ser que el usuario lo ingrese mal
-    //Asi que tengo que usar strtok
-    char * saveptr;
-    char * dia = strtok_r(str_date, "/", &saveptr);
-    char * mes = strtok_r(NULL, "/", &saveptr);
-    char * anio = strtok_r(NULL, "/", &saveptr);
-
-    int mes_num;
-    int dia_num;
-    int anio_num;
-    char mes_str[4];
-
-    if (mes != NULL)
-        sscanf(mes, "%d", &mes_num);
-
-    //Convierte strings a numeros
-    if (dia != NULL) sscanf(dia, "%d", &dia_num); else dia_num = 0;
-    if (anio != NULL) sscanf(anio, "%d", &anio_num); else anio_num = 0;
-    if (mes != NULL && mes_num >= 1 && mes_num <= 12) strcpy(mes_str, meses[mes_num-1]); else strcpy(mes_str, "---");
-
-    //Validaciones
-    if (dia_num <= 0 || dia_num > dias_meses[mes_num-1]) dia_num = 0;
-    if (anio_num <= 0) anio_num = 0;
-
-    //Finalmente los pone en el struct
-    date->dia = dia_num;
-    strcpy(date->mes, mes_str);
-    date->anio = anio_num;
-}
-
 //Funcion que cambia el texto de color
 void set_text_color(int color){
     HANDLE  hConsole;

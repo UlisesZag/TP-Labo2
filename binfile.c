@@ -22,7 +22,7 @@ int tamano_bin(FILE * pArchivo){
 //Funcion que muestra la tabla de creditos, con filtros segun opcion y "tipo"
 void listar_tabla_creditos(struct credito creditosbin[], int d, int opcion, char tipo[]){
     set_text_color(15);
-    printf("ORD | APELLIDO  | NOMBRE  | IMPORTE  | TIPO DE CREDITO | FECHA      | CUOTAS | IMPORTE CUOTA | IVA   | TOTAL CUOTA | ACTIVO\n");
+    printf("ORD | APELLIDO  | NOMBRE  | IMPORTE  | TIPO DE CREDITO | FECHA      | CUOTAS | IMPORTE CUOTA | IVA   | TOTAL CUOTA | ACT \n");
     set_text_color(7);
     for (int i = 0; i < d; i++){
         if (opcion == 1 && creditosbin[i].activo == 0) continue; //Si la opcion es solo los activos, no imprimir los inactivos
