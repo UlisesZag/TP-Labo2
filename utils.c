@@ -23,6 +23,7 @@ void string_toupper(char str[], int largo){
     for (int i = 0; i < largo; i++){
         if (str[i] == '\0') break;
         if (str[i] == 'ñ') str[i] = 'Ñ';
+        if (str[i] == 164) str[i] = 165;
         str[i] = toupper(str[i]); //Caracteres ingles
     }
 }
@@ -32,6 +33,7 @@ void string_tolower(char str[], int largo){
     for (int i = 0; i < largo; i++){
         if (str[i] == '\0') break;
         if (str[i] == 'Ñ') str[i] = 'ñ';
+        if (str[i] == 165) str[i] = 164;
         str[i] = tolower(str[i]);
     }
 }

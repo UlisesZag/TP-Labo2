@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1686950278 source:c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\main.c
+1687037458 source:c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\main.c
 	<stdio.h>
 	<stdlib.h>
 	<ctype.h>
@@ -24,18 +24,19 @@
 
 1686950013 c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\utils.h
 
-1686698261 source:c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\csvfile.c
+1687034447 source:c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\csvfile.c
 	<stdio.h>
 	<stdlib.h>
 	<ctype.h>
 	<strings.h>
+	<windows.h>
 	"structs.h"
 	"structfuncs.h"
 	"utils.h"
 	"defines.h"
 	"csvfile.h"
 
-1686950041 source:c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\utils.c
+1686955800 source:c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\utils.c
 	<stdio.h>
 	<stdlib.h>
 	<ctype.h>
@@ -45,7 +46,7 @@
 	"defines.h"
 	"utils.h"
 
-1686954008 source:c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\binfile.c
+1687042551 source:c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\binfile.c
 	<stdio.h>
 	<stdlib.h>
 	<ctype.h>
@@ -56,7 +57,7 @@
 	"defines.h"
 	"binfile.h"
 
-1686954305 source:c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\structfuncs.c
+1686955705 source:c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\structfuncs.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -65,5 +66,5 @@
 
 1686954333 c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\structfuncs.h
 
-1686695982 c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\defines.h
+1687031020 c:\users\user\documents\estudios\2023\unsam programacion\laboratorio de computacion ii\#tp final\defines.h
 

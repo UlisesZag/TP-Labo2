@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <strings.h>
+#include <windows.h>
 
 #include "structs.h"
 #include "structfuncs.h"
@@ -18,7 +19,12 @@ void listar_csv(char * arg1){
 
     //Si ARG1 es ingresado, lo usa como ruta de csv.
     if (arg1 == NULL){
-        printf("Ingrese la ruta del archivo CSV a listar: \nRUTA>");
+        //Imprime los archivos csv que haya en el directorio:
+        set_text_color(15); printf("----Archivos .csv en el directorio de la aplicacion----\n"); set_text_color(7);
+        system("dir /b *.csv");
+        set_text_color(15); printf("-------------------------------------------------------\n"); set_text_color(7);
+
+        printf("Ingrese la ruta del archivo CSV a listar: \nRUTA> ");
         scanf("%32[^\n]", ruta);
         fflush(stdin);
     }
@@ -92,7 +98,12 @@ void importar_csv(char *arg1){
 
     //Si ARG1 es ingresado, lo usa como ruta de archivo csv
     if (arg1 == NULL){
-        printf("Ingrese la ruta del archivo CSV a importar como creditos.dat: \nRUTA>");
+        //Imprime los archivos csv que haya en el directorio:
+        set_text_color(15); printf("----Archivos .csv en el directorio de la aplicacion----\n"); set_text_color(7);
+        system("dir /b *.csv");
+        set_text_color(15); printf("-------------------------------------------------------\n"); set_text_color(7);
+
+        printf("Ingrese la ruta del archivo CSV a importar como creditos.dat: \nRUTA> ");
         scanf("%32[^\n]", ruta);
         fflush(stdin);
     }
@@ -116,7 +127,7 @@ void importar_csv(char *arg1){
             set_text_color(14);
             printf("Ya existe un archivo \"creditos.dat\". Desea sobreescribirlo con los datos del CSV?\n");
             set_text_color(7);
-            printf("[S/N]>");
+            printf("[S/N]> ");
 
             char opcion;
             scanf("%c", &opcion);
@@ -207,11 +218,17 @@ void importar_csv(char *arg1){
 
 //Lista el archivo XYZ
 void listar_xyz(char *arg1){
-    char ruta[64];
+    struct credito_csv creditos[TABLE_MAX];
+    char ruta[65];
     FILE * pArchivo;
 
     if (arg1 == NULL){
-        printf("Ingrese la ruta del archivo XYZ a listar: \nRUTA>");
+        //Imprime los archivos xyz que haya en el directorio:
+        set_text_color(15); printf("----Archivos .xyz en el directorio de la aplicacion----\n"); set_text_color(7);
+        system("dir /b *.xyz");
+        set_text_color(15); printf("-------------------------------------------------------\n"); set_text_color(7);
+
+        printf("Ingrese la ruta del archivo XYZ a listar: \nRUTA> ");
         scanf("%64s", ruta);
         fflush(stdin);
     }
@@ -229,9 +246,38 @@ void listar_xyz(char *arg1){
     }
     else{
         char linea[2048];
+        int pos = 0;
+        set_text_color(15);
+        printf("Ord  Nombre y apellido  Importe    Tipo         Fecha       Cuotas  Imp. Cuota  IVA     Total Cuota\n");
+        set_text_color(7);
         fgets(linea, 2048, pArchivo);
         while (!feof(pArchivo)){
-            printf("%s", linea);
+            string_changechar(linea, 2048, ',', '.'); //Cambia las comas por puntos para que sscanf parsee bien.
+            sscanf(linea, "%d;%32[^;];%d;%32[^;];%d;%d;%d;%d;%lf;%lf;%lf\n",
+                    &creditos[pos].orden,
+                    creditos[pos].cliente,
+                    &creditos[pos].importe,
+                    creditos[pos].tipo,
+                    &creditos[pos].date.dia,
+                    &creditos[pos].date.mes,
+                    &creditos[pos].date.anio,
+                    &creditos[pos].cuotas,
+                    &creditos[pos].importe_cuota,
+                    &creditos[pos].iva,
+                    &creditos[pos].total_cuota);
+            printf("%-4d %-19s %9d %8s   %02d/%02d/%4d %6d %10.2lf %8.2lf %11.2lf\n",
+                    creditos[pos].orden,
+                    creditos[pos].cliente,
+                    creditos[pos].importe,
+                    creditos[pos].tipo,
+                    creditos[pos].date.dia,
+                    creditos[pos].date.mes,
+                    creditos[pos].date.anio,
+                    creditos[pos].cuotas,
+                    creditos[pos].importe_cuota,
+                    creditos[pos].iva,
+                    creditos[pos].total_cuota);
+            pos++;
             fgets(linea, 2048, pArchivo);
         }
     }

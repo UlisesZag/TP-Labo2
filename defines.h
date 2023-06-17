@@ -1,4 +1,4 @@
-#define TABLE_MAX 32
+#define TABLE_MAX 64
 
 #define ANSI_COLOR_RED     "\x1b[31m"
 #define ANSI_COLOR_GREEN   "\x1b[32m"

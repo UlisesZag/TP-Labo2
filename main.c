@@ -1,3 +1,29 @@
+/*
+UNIVERSIDAD NACIONAL DE SAN MARTIN | LABORATORIO DE COMPUTACION II | TRABAJO PRACTICO FINAL, Primer cuatrimestre, 2023
+Autor: ULISES ZAGARE; Fecha de entrega del TP: 20/6/2023;
+Archivos:
+CODIGO FUENTE:
+    main.c
+    binfile.c
+    binfile.h
+    csvfile.c
+    csvfile.h
+    structs.h
+    structfuncs.c
+    structfuncs.h
+    utils.c
+    utils.h
+    defines.h
+CSVs:
+    prestamos.csv
+ARCHIVOS DE PROYECTO:
+    TP_Final.cbp
+    TP_Final.depend
+    TP_Final.layout
+DOCUMENTACION
+    docs/Trabajo práctico final  LABO II 1er C - 2023.pdf (trabajo practico)
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -13,11 +39,11 @@
 
 int main(){
     //Menu principal
-    char input[64];
+    char input[65];
     int salir = 0;
 
     set_text_color(11);
-    printf("================ [ GESTION DE CREDITOS v0.1 ] ================\n");
+    printf("================================== [ GESTION DE CREDITOS v0.1 ] ==================================\n");
     set_text_color(7);
     existe_bin();
     printf("Ingrese \"ayuda\" para obtener una lista de comandos.\n");
@@ -87,14 +113,18 @@ int main(){
                 printf(
                        "- Tabla de creditos: -------------------------------------------------------------------------------------\n"
                        "\t - nuevodat: Crear nuevo archivo \"creditos.bin\"\n"
-                       "\t - listar [opcion][tipo]: Listar todos los creditos.\n"
+                       "\t - listar [opcion][tipo/fechas]: Listar todos los creditos.\n"
                        "\t    [opcion]: El filtro de listado. \n"
                        "\t        - Si esta vacio muestra todos los creditos\n"
                        "\t        - Si es \"activos\" muestra solo los activos\n"
                        "\t        - Si es \"tipo\" muestra solo los de un tipo de credito especificado por tipo.\n"
-                       "\t    [tipo]:   El tipo de credito del filtro por tipo. \n"
-                       "\t        - Si es \"garantia\" muestra solo los del tipo \"CON GAARANTIA\"\n"
+                       "\t        - Si es \"fecha\" muestra solo los creditos entre un rango de fechas.\n"
+                       "\t    [tipo/fechas]:   El tipo de credito para el filtro por tipo, o las fechas para el filtro por fechas.\n"
+                       "\t        << SOLO PARA TIPO >>\n"
+                       "\t        - Si es \"garantia\" muestra solo los del tipo \"CON G    ARANTIA\"\n"
                        "\t        - Si es \"firma\" muestra solo los del tipo \"A SOLA FIRMA\"\n"
+                       "\t        << SOLO PARA FECHA >>\n"
+                       "\t        - Las fechas deben ser en formato dia/mes/a%co EN NUMEROS.\n"
                        "\t - modificar [orden][opcion][tipo/importe]: Modifica un campo de un credito por numero de orden.\n"
                        "\t    [orden]:  El numero de orden del credito a modificar.\n"
                        "\t    [opcion]: El campo a modificar:\n"
@@ -113,19 +143,19 @@ int main(){
                        "\t    [orden]:  El numero de orden del credito a dar de baja\n"
                        "\t - bajafisica [orden]: Borra a un credito de la tabla, y lo escribe en un archivo .xyz por fecha.\n"
                        "\t    [orden]:  El numero de orden del credito a dar de baja\n"
-                       "\t - listarxyz [ruta]: Listar un archivo .xyz hecho por bajafisica.\n"
-                       "\t    [ruta]: La ruta del archivo .xyz a mostrar.\n"
                        "\n"
                        "- CSV: ---------------------------------------------------------------------------------------------------\n"
                        "\t - listarcsv [ruta]: Listar todos los creditos de un csv.\n"
                        "\t    [ruta]: La ruta del archivo .csv a mostrar.\n"
                        "\t - importarcsv [ruta]: Importar los datos de un CSV a la base creditos.dat.\n"
-                       "\t    [ruta]: La ruta del archivo .csv a importar como \"creditos.day\".\n"
+                       "\t    [ruta]: La ruta del archivo .csv a importar como \"creditos.dat\".\n"
+                       "\t - listarxyz [ruta]: Listar un archivo .xyz hecho por bajafisica.\n"
+                       "\t    [ruta]: La ruta del archivo .xyz a mostrar.\n"
                        "\n"
                        "- Otros: -------------------------------------------------------------------------------------------------\n"
                        "\t - ayuda: Mostrar lista de comandos.\n"
-                       "\t - salir: Salir\n"
-                       );
+                       "\t - salir: Salir\n",
+                       164);
             }
             else{
                 printf("No se reconoce el comando. Ingrese \"ayuda\" para obtener una lista de comandos.\n");

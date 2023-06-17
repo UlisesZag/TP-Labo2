@@ -155,7 +155,7 @@ void scan_fecha(struct fecha *date){
     //Fecha
     char strfecha[11] = "00/00/0000";
     do{
-        printf("Ingrese la fecha (formato: dia/mes/a%co en numeros)\nFECHA> ", 'ñ');
+        printf("Ingrese la fecha (formato: dia/mes/a%co en numeros)\nFECHA> ", 164);
         scanf("%10s", strfecha);
         fflush(stdin);
 

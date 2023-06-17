@@ -22,10 +22,17 @@ int tamano_bin(FILE * pArchivo){
 //Funcion que muestra la tabla de creditos, con filtros segun opcion y "tipo"
 void listar_tabla_creditos(struct credito creditosbin[], int d, int opcion, char tipo[], struct fecha fecha1, struct fecha fecha2){
     set_text_color(15);
-    printf("ORD | APELLIDO  | NOMBRE  | IMPORTE  | TIPO DE CREDITO | FECHA      | CUOTAS | IMPORTE CUOTA | IVA   | TOTAL CUOTA | ACT \n");
+    printf("ORD | APELLIDO  | NOMBRE  | IMPORTE  | TIPO DE CREDITO | FECHA      | CUOTAS | IMPORTE CUOTA | IVA   | TOTAL CUOTA | ACT\n");
     set_text_color(7);
 
+    //Ve desde donde la tabla esta vacia
+    int con_datos = 0;
     for (int i = 0; i < d; i++){
+        if (creditosbin[i].orden != 0) con_datos = i+1;
+    }
+
+    //Ahora imprime todos hasta con_datos
+    for (int i = 0; i < con_datos; i++){
         if (opcion == 1 && creditosbin[i].activo == 0) continue; //Si la opcion es solo los activos, no imprimir los inactivos
         if (opcion == 2 && strcmp(creditosbin[i].tipo, tipo) != 0) continue; //Si la opcion es solo los activos, no imprimir los inactivos
 
@@ -69,7 +76,7 @@ void crear_creditosdat(){
         set_text_color(14);
         printf("Ya existe un archivo \"creditos.dat\". Desea sobreescribirlo con un archivo en blanco?\n");
         set_text_color(7);
-        printf("[S/N]>");
+        printf("[S/N]> ");
 
         char opcion;
         scanf("%c", &opcion);
@@ -182,7 +189,7 @@ void listar_bin(char *arg1, char *arg2, char *arg3){
                 str_to_fecha(&fecha1, arg2);
                 if (!fecha_valida(fecha1)){
                     set_text_color(12);
-                    printf("[!] Fecha inicial invalida (mas dias de los que tiene el mes? o mas meses de los que tiene el año?).ºn");
+                    printf("[!] Fecha inicial invalida (mas dias de los que tiene el mes? o mas meses de los que tiene el a%co?).\n", 164);
                     set_text_color(7);
                     fclose(pArchivo);
                     return;
@@ -195,7 +202,7 @@ void listar_bin(char *arg1, char *arg2, char *arg3){
                 scan_fecha(&fecha1);
                 if (!fecha_valida(fecha1)){
                     set_text_color(12);
-                    printf("[!] Fecha inicial invalida (mas dias de los que tiene el mes? o mas meses de los que tiene el año?).\n");
+                    printf("[!] Fecha inicial invalida (mas dias de los que tiene el mes? o mas meses de los que tiene el a%co?).\n", 164);
                     set_text_color(7);
                     fclose(pArchivo);
                     return;
@@ -207,7 +214,7 @@ void listar_bin(char *arg1, char *arg2, char *arg3){
                 str_to_fecha(&fecha2, arg3);
                 if (!fecha_valida(fecha2)){
                     set_text_color(12);
-                    printf("[!] Fecha final invalida (mas dias de los que tiene el mes? o mas meses de los que tiene el año?).\n");
+                    printf("[!] Fecha final invalida (mas dias de los que tiene el mes? o mas meses de los que tiene el a%co?).\n", 164);
                     set_text_color(7);
                     fclose(pArchivo);
                     return;
@@ -220,7 +227,7 @@ void listar_bin(char *arg1, char *arg2, char *arg3){
                 scan_fecha(&fecha2);
                 if (!fecha_valida(fecha2)){
                     set_text_color(12);
-                    printf("[!] Fecha final invalida (mas dias de los que tiene el mes? o mas meses de los que tiene el año?).\n");
+                    printf("[!] Fecha final invalida (mas dias de los que tiene el mes? o mas meses de los que tiene el a%co?).\n", 164);
                     set_text_color(7);
                     fclose(pArchivo);
                     return;
@@ -293,11 +300,11 @@ void alta(char * arg1){
 
         //Nombre
         printf("Nombre: ");
-        scanf("%32s", creditosbin[orden-1].nombre);
+        scanf("%31s", creditosbin[orden-1].nombre);
         fflush(stdin);
         //Apellido
         printf("Apellido: ");
-        scanf("%32s", creditosbin[orden-1].apellido);
+        scanf("%31s", creditosbin[orden-1].apellido);
         fflush(stdin);
         string_toupper(creditosbin[orden-1].apellido, strlen(creditosbin[orden-1].apellido));
 
@@ -326,7 +333,7 @@ void alta(char * arg1){
         //Fecha
         char strfecha[11] = "00/00/0000";
         do{
-            printf("Ingrese la fecha (formato: dia/mes/a%co en numeros)\nFecha: ", 'ñ');
+            printf("Ingrese la fecha (formato: dia/mes/a%co en numeros)\nFecha: ", 164);
             scanf("%10s", strfecha);
             fflush(stdin);
 
@@ -412,7 +419,7 @@ void modificar(char *arg1, char *arg2, char *arg3){
             printf("Que campo desea modificar?\n"
                    "A: TIPO DE CREDITO\n"
                    "B: IMPORTE\n"
-                   "OPCION>");
+                   "OPCION> ");
             scanf("%c", &opcion);
             fflush(stdin);
             opcion = toupper(opcion);
@@ -435,7 +442,7 @@ void modificar(char *arg1, char *arg2, char *arg3){
                 printf("Que tipo?\n"
                        "A: CON GARANTIA\n"
                        "B: A SOLA FIRMA\n"
-                       "OPCION>");
+                       "OPCION> ");
                 scanf("%c", &opcion);
                 fflush(stdin);
                 tipo = toupper(opcion);
@@ -453,7 +460,7 @@ void modificar(char *arg1, char *arg2, char *arg3){
             }
 
             char confirmacion;
-            printf("Esta seguro que quiere modificar el credito? [S/N]\n");
+            printf("Esta seguro que quiere modificar el credito?\n[S/N]> ");
             scanf("%c", &confirmacion);
             fflush(stdin);
             confirmacion = toupper(confirmacion);
@@ -487,7 +494,7 @@ void modificar(char *arg1, char *arg2, char *arg3){
             }
 
             char confirmacion;
-            printf("Esta seguro que quiere modificar el credito? [S/N]\n");
+            printf("Esta seguro que quiere modificar el credito?\n[S/N]> ");
             scanf("%c", &confirmacion);
             fflush(stdin);
             confirmacion = toupper(confirmacion);
@@ -544,7 +551,7 @@ void buscar(char *arg1, char *arg2, char *arg3){
         else{
             printf("Ingrese el tipo de dato para buscar el credito:\n"
                    "1: Numero de orden; 2: Apellido.\n"
-                   "TIPO>");
+                   "TIPO> ");
             scanf("%d", &opcion);
             fflush(stdin);
         }
@@ -615,7 +622,7 @@ void buscar(char *arg1, char *arg2, char *arg3){
         //Si es por apellido
         if (opcion == 2){
             int orden = -1;
-            char apellido[33];
+            char apellido[32];
 
             if (arg2 != NULL){
                 strcpy(apellido, arg2);
@@ -628,7 +635,7 @@ void buscar(char *arg1, char *arg2, char *arg3){
             else{
                 printf("Ingrese el apellido:\n"
                        "APELLIDO> ");
-                scanf("%32[^\n]", apellido);
+                scanf("%31[^\n]", apellido);
                 fflush(stdin);
             }
 
@@ -823,15 +830,18 @@ void baja_fisica(char *arg1){
         pArchivo = fopen("creditos.dat", "wb");
         pArchivoXyz = fopen(ruta_xyz, "a");
 
-        fprintf(pArchivoXyz, "%d: %s %s; %f; %s; %d/%s/%d; %d; %f; %f; %f\n",
+        struct fecha fechanum;
+        fechames_to_fecha(creditosbin[orden-1].date, &fechanum);
+
+        fprintf(pArchivoXyz, "%d;%s %s;%d;%s;%d;%d;%d;%d;%f;%f;%f\n",
                 creditosbin[orden-1].orden,
                 creditosbin[orden-1].nombre,
                 creditosbin[orden-1].apellido,
-                creditosbin[orden-1].importe,
+                (int) creditosbin[orden-1].importe,
                 creditosbin[orden-1].tipo,
-                creditosbin[orden-1].date.dia,
-                creditosbin[orden-1].date.mes,
-                creditosbin[orden-1].date.anio,
+                fechanum.dia,
+                fechanum.mes,
+                fechanum.anio,
                 creditosbin[orden-1].cuotas,
                 creditosbin[orden-1].importe_cuota,
                 creditosbin[orden-1].iva,
@@ -862,4 +872,3 @@ void baja_fisica(char *arg1){
         fclose(pArchivoXyz);
     }
 }
-
