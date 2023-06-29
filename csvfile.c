@@ -11,7 +11,7 @@
 
 #include "csvfile.h"
 
-//Lista un csv que ingrese el usuario
+///LISTARCSV: Lista un csv que ingrese el usuario
 void listar_csv(char * arg1){
     char ruta[32];
     struct credito_csv creditos[TABLE_MAX];
@@ -37,7 +37,7 @@ void listar_csv(char * arg1){
 
     if (pArchivo == NULL){
         set_text_color(12);
-        printf("[!] El archivo no existe. Verificar ruta ingresada.\n");
+        printf("[!] El archivo no existe. Verificar ruta ingresada. [E#1]\n");
         set_text_color(7);
     }
     else{
@@ -85,7 +85,7 @@ void listar_csv(char * arg1){
     fclose(pArchivo);
 }
 
-//Convertir un CSV a creditos.dat
+///IMPORTARCSV: Convertir un CSV a creditos.dat
 void importar_csv(char *arg1){
     char meses[12][4] = {"ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"};
     char ruta[32];
@@ -116,7 +116,7 @@ void importar_csv(char *arg1){
 
     if (pArchivoCsv == NULL){
         set_text_color(12);
-        printf("[!] El archivo no existe. Verificar ruta ingresada.\n");
+        printf("[!] El archivo no existe. Verificar ruta ingresada. [E#1]\n");
         set_text_color(7);
     }
     else{
@@ -216,7 +216,7 @@ void importar_csv(char *arg1){
     fclose(pArchivoCsv);
 }
 
-//Lista el archivo XYZ
+///LISTARXYZ: Lista un archivo XYZ generado por bajafisica
 void listar_xyz(char *arg1){
     struct credito_csv creditos[TABLE_MAX];
     char ruta[65];
@@ -241,7 +241,7 @@ void listar_xyz(char *arg1){
 
     if (pArchivo == NULL){
         set_text_color(12);
-        printf("ERROR: El archivo no existe. Verificar ruta ingresada.\n");
+        printf("ERROR: El archivo no existe. Verificar ruta ingresada. [E#1]\n");
         set_text_color(7);
     }
     else{
@@ -265,7 +265,7 @@ void listar_xyz(char *arg1){
                     &creditos[pos].importe_cuota,
                     &creditos[pos].iva,
                     &creditos[pos].total_cuota);
-            printf("%-4d %-19s %9d %8s   %02d/%02d/%4d %6d %10.2lf %8.2lf %11.2lf\n",
+            printf("%-4d %-19s %9d %8s   %02d/%02d/%04d %6d %10.2lf %8.2lf %11.2lf\n",
                     creditos[pos].orden,
                     creditos[pos].cliente,
                     creditos[pos].importe,

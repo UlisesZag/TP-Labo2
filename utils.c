@@ -49,12 +49,33 @@ void get_date_string(char str[], char separator){
 //Funcion que solo deja ingresar un numero dentro de un rango.
 float scan_num_range(char prompt[], float minimo, float maximo){
     float num;
+    char input[32];
     while (1){
         printf("%s", prompt);
-        scanf("%f", &num);
+        scanf("%31s", input);
         fflush(stdin);
+
+        //Cambia las comas por puntos
+        string_changechar(input, strlen(input), ',', '.');
+
+        int valid = 1;
+        //Chequea si no ingreso letras o cosas asi
+        for (int i = 0; i < strlen(input); i++){
+            if ((!isdigit(input[i])) && (input[i] != '.')) valid = 0;
+        }
+        if (!valid){
+            set_text_color(12);
+            printf("[!] Valor invalido. Ingrese un numero entero / con coma. [E#2]\n");
+            set_text_color(7);
+            continue;
+        }
+
+        sscanf(input, "%f", &num);
+
         if (num >= minimo && num <= maximo) break;
-        printf("[!] Valor fuera de rango. Ingrese un valor valido.\n");
+        set_text_color(12);
+        printf("[!] Valor fuera de rango. Ingrese un valor valido. [E#5]\n");
+        set_text_color(7);
     }
 
     return num;

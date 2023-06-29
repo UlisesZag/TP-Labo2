@@ -44,7 +44,7 @@ void listar_tabla_creditos(struct credito creditosbin[], int d, int opcion, char
                 continue;
         }
 
-        printf("%-3d  %-11s %-10s %9.2f %17s  %02d/%3s/%04d %8d %14.2lf %8.2lf %13.2lf %3d\n",
+        printf("%-3d  %-11s %-10s%10.2f %17s  %02d/%3s/%04d %8d %14.2lf %8.2lf %13.2lf %3d\n",
                 creditosbin[i].orden,
                 creditosbin[i].apellido,
                 creditosbin[i].nombre,
@@ -61,7 +61,7 @@ void listar_tabla_creditos(struct credito creditosbin[], int d, int opcion, char
     }
 }
 
-//Funcion que crea un archivo creditos.dat vacio.
+///nuevodat: Funcion que crea un archivo creditos.dat vacio.
 void crear_creditosdat(){
     FILE * pArchivo;
 
@@ -106,7 +106,7 @@ void crear_creditosdat(){
     }
 }
 
-//Funcion que verifica la existencia de creditos.bin
+//Funcion que verifica la existencia de creditos.dat
 int existe_bin(){
     FILE *pArchivo;
     pArchivo = fopen("creditos.dat", "rb");
@@ -117,7 +117,7 @@ int existe_bin(){
     }
     else{
         set_text_color(12);
-        printf("[!] No existe un archivo \"creditos.dat\". Cree uno con \"nuevodat\" o importe un CSV con \"importarcsv\".\n\n");
+        printf("[!] No existe un archivo \"creditos.dat\". Cree uno con \"nuevodat\" o importe un CSV con \"importarcsv\". [E#0]\n\n");
         set_text_color(7);
         return 0;
     }
@@ -147,14 +147,39 @@ void listar_bin(char *arg1, char *arg2, char *arg3){
         //Lee el archivo
         fseek(pArchivo, 0, SEEK_SET);
         fread(&creditosbin, sizeof(struct credito)*TABLE_MAX, 1, pArchivo);
+        fclose(pArchivo);
 
-        int opcion = 0; //Filtros de listado
+        int opcion = -1; //Filtros de listado
         char tipo[32];
         struct fecha fecha1, fecha2;
         if (arg1 != NULL){
+            if (strcmp(arg1, "todos") == 0) opcion = 0;
             if (strcmp(arg1, "activos") == 0) opcion = 1;
             if (strcmp(arg1, "tipo") == 0) opcion = 2;
             if (strcmp(arg1, "fecha") == 0) opcion = 3;
+        }
+        else{
+            char opcionchar = 'Z';
+            printf("Que desea listar?\n"
+                   "A: Todos los creditos incluyendo los inactivos.\n"
+                   "B: Solo los creditos activos.\n"
+                   "C: Solo los creditos de un tipo especifico.\n"
+                   "D: Solo los creditos entre un rango de fechas.\n"
+                   "OPCION>");
+            scanf("%c", &opcionchar);
+            fflush(stdin);
+            opcionchar = toupper(opcionchar);
+            if (opcionchar == 'A') opcion = 0;
+            if (opcionchar == 'B') opcion = 1;
+            if (opcionchar == 'C') opcion = 2;
+            if (opcionchar == 'D') opcion = 3;
+        }
+
+        if (opcion == -1){
+            set_text_color(12);
+            printf("[!] Opcion invalida. [E#2]\n");
+            set_text_color(7);
+            return;
         }
 
         if (opcion == 2){
@@ -175,9 +200,8 @@ void listar_bin(char *arg1, char *arg2, char *arg3){
                 else if (tipo_c == 'B') strcpy(tipo, "A SOLA FIRMA");
                 else{
                     set_text_color(12);
-                    printf("[!] Tipo de credito invalido.");
+                    printf("[!] Tipo de credito invalido. [E#2]\n");
                     set_text_color(7);
-                    fclose(pArchivo);
                     return;
                 }
             }
@@ -189,9 +213,8 @@ void listar_bin(char *arg1, char *arg2, char *arg3){
                 str_to_fecha(&fecha1, arg2);
                 if (!fecha_valida(fecha1)){
                     set_text_color(12);
-                    printf("[!] Fecha inicial invalida (mas dias de los que tiene el mes? o mas meses de los que tiene el a%co?).\n", 164);
+                    printf("[!] Fecha inicial invalida (mas dias de los que tiene el mes? o mas meses de los que tiene el a%co?). [E#3]\n", 164);
                     set_text_color(7);
-                    fclose(pArchivo);
                     return;
                 }
             }
@@ -202,9 +225,8 @@ void listar_bin(char *arg1, char *arg2, char *arg3){
                 scan_fecha(&fecha1);
                 if (!fecha_valida(fecha1)){
                     set_text_color(12);
-                    printf("[!] Fecha inicial invalida (mas dias de los que tiene el mes? o mas meses de los que tiene el a%co?).\n", 164);
+                    printf("[!] Fecha inicial invalida (mas dias de los que tiene el mes? o mas meses de los que tiene el a%co?). [E#3]\n", 164);
                     set_text_color(7);
-                    fclose(pArchivo);
                     return;
                 }
             }
@@ -214,9 +236,8 @@ void listar_bin(char *arg1, char *arg2, char *arg3){
                 str_to_fecha(&fecha2, arg3);
                 if (!fecha_valida(fecha2)){
                     set_text_color(12);
-                    printf("[!] Fecha final invalida (mas dias de los que tiene el mes? o mas meses de los que tiene el a%co?).\n", 164);
+                    printf("[!] Fecha final invalida (mas dias de los que tiene el mes? o mas meses de los que tiene el a%co?). [E#3]\n", 164);
                     set_text_color(7);
-                    fclose(pArchivo);
                     return;
                 }
             }
@@ -227,9 +248,8 @@ void listar_bin(char *arg1, char *arg2, char *arg3){
                 scan_fecha(&fecha2);
                 if (!fecha_valida(fecha2)){
                     set_text_color(12);
-                    printf("[!] Fecha final invalida (mas dias de los que tiene el mes? o mas meses de los que tiene el a%co?).\n", 164);
+                    printf("[!] Fecha final invalida (mas dias de los que tiene el mes? o mas meses de los que tiene el a%co?). [E#3]\n", 164);
                     set_text_color(7);
-                    fclose(pArchivo);
                     return;
                 }
             }
@@ -237,19 +257,17 @@ void listar_bin(char *arg1, char *arg2, char *arg3){
             //Se fija si fecha 1 < fecha 2
             if (fechacmp(fecha1, fecha2) == 1){
                 set_text_color(12);
-                printf("[!] La fecha inicial es mayor a la fecha final.\n");
+                printf("[!] La fecha inicial es mayor a la fecha final. [E#4]\n");
                 set_text_color(7);
-                fclose(pArchivo);
                 return;
             }
         }
         listar_tabla_creditos(creditosbin, registros, opcion, tipo, fecha1, fecha2);
-
-        fclose(pArchivo);
     }
 }
 
 ///ALTAS: Funcion que da de alta a un credito.
+//El usuario debe ingresar nombre, apellido, importe, cuotas y tipo de credito.
 void alta(char * arg1){
     if (!existe_bin()) return;
 
@@ -285,13 +303,13 @@ void alta(char * arg1){
 
         if (orden < 1 || orden > TABLE_MAX){//SI EL VALOR ESTA FUERA DE RANGO
             set_text_color(12);
-            printf("[!] Orden ingresado fuera de rango. Ingrese un numero de orden valido.\n");
+            printf("[!] Orden ingresado fuera de rango. Ingrese un numero de orden valido. [E#5]\n");
             set_text_color(7);
             return;
         }
         if (creditosbin[orden-1].orden != 0){//SI EL CREDITO NO EXISTE
             set_text_color(12);
-            printf("[!] Ya existe un credito de orden %d. Elija otro.\n", orden);
+            printf("[!] Ya existe un credito de orden %d. Elija otro. [E#6]\n", orden);
             set_text_color(7);
             return;
         }
@@ -304,12 +322,12 @@ void alta(char * arg1){
         fflush(stdin);
         //Apellido
         printf("Apellido: ");
-        scanf("%31s", creditosbin[orden-1].apellido);
+        scanf("%31[^\n]", creditosbin[orden-1].apellido);
         fflush(stdin);
         string_toupper(creditosbin[orden-1].apellido, strlen(creditosbin[orden-1].apellido));
 
         //Importe
-        creditosbin[orden-1].importe = scan_num_range("Importe: ", 0, 9999999);
+        creditosbin[orden-1].importe = scan_num_range("Importe: ", 1, 9999999);
 
         //Tipo
         char tipo_c;
@@ -321,7 +339,7 @@ void alta(char * arg1){
 
             if (tipo_c != 'A' && tipo_c != 'B'){
                 set_text_color(12);
-                printf("[!] Tipo de credito invalido. Ingrese un tipo de credito valido.\n");
+                printf("[!] Tipo de credito invalido. Ingrese un tipo de credito valido. [E#2]\n");
                 set_text_color(7);
             }
         } while (tipo_c != 'A' && tipo_c != 'B');
@@ -343,7 +361,7 @@ void alta(char * arg1){
                 creditosbin[orden-1].date.anio == 0 ||
                 strcmp(creditosbin[orden-1].date.mes, "---") == 0){
                     set_text_color(12);
-                    printf("[!] Fecha invalida. Ingrese una fecha valida.\n");
+                    printf("[!] Fecha invalida. Ingrese una fecha valida. [E#2/E#3]\n");
                     set_text_color(7);
                 }
 
@@ -353,11 +371,20 @@ void alta(char * arg1){
 
 
         //Varios valores numericos
-        creditosbin[orden-1].cuotas = (int) scan_num_range("Cuotas: ", 0, 999999);
-        creditosbin[orden-1].importe_cuota = (double) scan_num_range("Importe cuota: ", 0, 99999999);
-        creditosbin[orden-1].iva = (double) scan_num_range("IVA: ", 0, 99999999);
-        creditosbin[orden-1].total_cuota = (double) scan_num_range("Total cuota: ", 0, 99999999);
+        creditosbin[orden-1].cuotas = (int) scan_num_range("Cuotas: ", 1, 999999);
+        creditosbin[orden-1].importe_cuota = (double) creditosbin[orden-1].importe / creditosbin[orden-1].cuotas; //Importe de la cuota
+        creditosbin[orden-1].iva = (double) creditosbin[orden-1].importe_cuota * IVA; //IVA
+        creditosbin[orden-1].total_cuota = (double) (creditosbin[orden-1].importe_cuota + creditosbin[orden-1].importe_cuota*IVA);
         creditosbin[orden-1].activo = 1;
+
+        printf("DATOS CALCULADOS:\n"
+               "- Importe de cada cuota: %.2f\n"
+               "- IVA: %.2f (%.2f%%)\n"
+               "- Total de cada cuota: %.2f\n",
+               creditosbin[orden-1].importe_cuota,
+               creditosbin[orden-1].iva,
+               IVA,
+               creditosbin[orden-1].total_cuota);
 
 
         //Aca abre de nuevo el archivo y escribe todo el struct, luego lo cierra de nuevo
@@ -371,6 +398,8 @@ void alta(char * arg1){
     }
 }
 
+///Modificar: funcion que modifica el tipo o el importe de un credito
+//El usuario debe ingresar orden, opcion (campo a modificar) y tipo de credito o importe
 void modificar(char *arg1, char *arg2, char *arg3){
     if (!existe_bin()) return;
 
@@ -403,13 +432,13 @@ void modificar(char *arg1, char *arg2, char *arg3){
 
         if (orden < 1 || orden > TABLE_MAX){//SI EL VALOR ESTA FUERA DE RANGO
             set_text_color(12);
-            printf("[!] Orden ingresado fuera de rango. Ingrese un numero de orden valido.\n");
+            printf("[!] Orden ingresado fuera de rango. Ingrese un numero de orden valido. [E#5]\n");
             set_text_color(7);
             return;
         }
         if (creditosbin[orden-1].orden == 0){//SI EL CREDITO NO EXISTE
             set_text_color(12);
-            printf("[!] No existe un credito de orden %d. \n", orden);
+            printf("[!] No existe un credito de orden %d. [E#7]\n", orden);
             set_text_color(7);
             return;
         }
@@ -431,7 +460,7 @@ void modificar(char *arg1, char *arg2, char *arg3){
         //Opcion invalida?
         if (opcion != 'A' && opcion != 'B'){
             set_text_color(12);
-            printf("[!] Opcion invalida. Ingrese una opcion valida. \n");
+            printf("[!] Opcion invalida. Ingrese una opcion valida. [E#2]\n");
             set_text_color(7);
             return;
         }
@@ -454,7 +483,7 @@ void modificar(char *arg1, char *arg2, char *arg3){
 
             if (tipo != 'A' && tipo != 'B'){
                 set_text_color(12);
-                printf("[!] Opcion invalida. Ingrese una opcion valida. \n");
+                printf("[!] Opcion invalida. Ingrese una opcion valida. [E#2]\n");
                 set_text_color(7);
                 return;
             }
@@ -488,7 +517,7 @@ void modificar(char *arg1, char *arg2, char *arg3){
 
             if (importe <= 0.000001f){
                 set_text_color(12);
-                printf("[!] Importe invalido. \n");
+                printf("[!] Importe invalido. [E#2]\n");
                 set_text_color(7);
                 return;
             }
@@ -501,6 +530,18 @@ void modificar(char *arg1, char *arg2, char *arg3){
 
             if (confirmacion == 'S'){
                 creditosbin[orden-1].importe = importe;
+                creditosbin[orden-1].importe_cuota = (double) creditosbin[orden-1].importe / creditosbin[orden-1].cuotas; //Importe de la cuota
+                creditosbin[orden-1].iva = (double) creditosbin[orden-1].importe_cuota * IVA; //IVA
+                creditosbin[orden-1].total_cuota = (double) (creditosbin[orden-1].importe_cuota + creditosbin[orden-1].importe_cuota*IVA);
+
+                printf("DATOS CALCULADOS:\n"
+                        "- Importe de cada cuota: %.2f\n"
+                        "- IVA: %.2f (%.2f%%)\n"
+                        "- Total de cada cuota: %.2f\n",
+                        creditosbin[orden-1].importe_cuota,
+                        creditosbin[orden-1].iva,
+                        IVA,
+                        creditosbin[orden-1].total_cuota);
                 set_text_color(10);
                 printf("Importe de credito en orden %d modificado con exito.\n", orden);
                 set_text_color(7);
@@ -541,6 +582,7 @@ void buscar(char *arg1, char *arg2, char *arg3){
         //Lee el archivo
         fseek(pArchivo, 0, SEEK_SET);
         fread(&creditosbin, sizeof(struct credito)*TABLE_MAX, 1, pArchivo);
+        fclose(pArchivo);
 
         int opcion = 0;
         //Tipo de dato a usar para buscar
@@ -557,7 +599,7 @@ void buscar(char *arg1, char *arg2, char *arg3){
         }
         if (opcion != 1 && opcion != 2){
             set_text_color(12);
-            printf("[!] Opcion invalida. Ingrese una opcion valida.\n");
+            printf("[!] Opcion invalida. Ingrese una opcion valida. [E#2]\n");
             set_text_color(7);
             return;
         }
@@ -577,14 +619,15 @@ void buscar(char *arg1, char *arg2, char *arg3){
             //Validacion
             if (orden < 1 || orden > TABLE_MAX){//SI EL VALOR ESTA FUERA DE RANGO
                 set_text_color(12);
-                printf("[!] Orden ingresado fuera de rango. Ingrese un numero de orden valido.\n");
+                printf("[!] Orden ingresado fuera de rango. Ingrese un numero de orden valido. [E#5]\n");
                 set_text_color(7);
                 return;
             }
             if (creditosbin[orden-1].orden == 0){//SI EL CREDITO NO EXISTE
                 set_text_color(12);
-                printf("[!] No existe un credito de orden %d. \n", orden);
+                printf("[!] No existe un credito de orden %d. [E#7]\n", orden);
                 set_text_color(7);
+                fclose(pArchivo);
                 return;
             }
 
@@ -641,6 +684,13 @@ void buscar(char *arg1, char *arg2, char *arg3){
 
             string_toupper(apellido, strlen(apellido));
 
+            if (strcmp(apellido, "") == 0){
+                set_text_color(12);
+                printf("[!] El apellido ingresado esta vacio. Ingrese un apellido valido. [E#2]\n");
+                set_text_color(7);
+                return;
+            }
+
             //Busca el orden por apellido
             for (int i = 0; i < TABLE_MAX; i++){
                 if (strcmp(creditosbin[i].apellido, apellido) == 0){
@@ -649,8 +699,8 @@ void buscar(char *arg1, char *arg2, char *arg3){
                 }
             }
             if (orden < 0){
-                set_text_color(12);
-                printf("[!] No se pudo encontrar un credito con ese apellido.\n");
+                set_text_color(14);
+                printf("No se pudo encontrar un credito con ese apellido.\n");
                 set_text_color(7);
                 return;
             }
@@ -686,9 +736,6 @@ void buscar(char *arg1, char *arg2, char *arg3){
                    creditosbin[orden].activo
                    );
         }
-
-
-        fclose(pArchivo);
     }
 }
 
@@ -732,7 +779,7 @@ void baja_logica(char * arg1){
         //SI EL VALOR ESTA FUERA DE RANGO
         if (orden < 1 || orden > TABLE_MAX){
             set_text_color(12);
-            printf("[!] Orden ingresado fuera de rango. Ingrese un numero de orden valido.\n");
+            printf("[!] Orden ingresado fuera de rango. Ingrese un numero de orden valido. [E#5]\n");
             set_text_color(7);
             return;
         }
@@ -740,7 +787,7 @@ void baja_logica(char * arg1){
         //SI EL CREDITO NO EXISTE
         if (creditosbin[orden-1].orden == 0){
             set_text_color(12);
-            printf("[!] No existe un credito en el orden %d.\n", orden);
+            printf("[!] No existe un credito en el orden %d. [E#7]\n", orden);
             set_text_color(7);
             return;
         }
@@ -748,8 +795,26 @@ void baja_logica(char * arg1){
         //SI EL CREDITO YA ES PASIVO
         if (creditosbin[orden-1].activo == 0){
             set_text_color(12);
-            printf("[!] El credito con orden %d no es activo.\n", orden);
+            printf("[!] El credito con orden %d no es activo. [E#9]\n", orden);
             set_text_color(7);
+            return;
+        }
+
+        //Emite los datos
+        char ordenstr[32];
+        sprintf(ordenstr, "%d", orden);
+        buscar("orden", ordenstr, NULL);
+
+        char confirmacion;
+        set_text_color(14);
+        printf("Esta seguro que quiere dar de baja el credito?\n");
+        set_text_color(7);
+        printf("[S/N]> ");
+        scanf("%c", &confirmacion);
+        fflush(stdin);
+        confirmacion = toupper(confirmacion);
+        if (confirmacion != 'S'){
+            fclose(pArchivo);
             return;
         }
 
@@ -760,8 +825,10 @@ void baja_logica(char * arg1){
         fclose(pArchivo);
 
         set_text_color(10);
-        printf("Baja logica en orden %d realizado con exito.\n", orden);
+        printf("Baja logica en orden %d realizado con exito.\n\n", orden);
         set_text_color(7);
+
+        listar_bin("activos", NULL, NULL);
     }
 }
 
@@ -806,7 +873,7 @@ void baja_fisica(char *arg1){
         //SI EL VALOR ESTA FUERA DE RANGO
         if (orden < 1 || orden > TABLE_MAX){
             set_text_color(12);
-            printf("[!] Orden ingresado fuera de rango. Ingrese un numero de orden valido.\n");
+            printf("[!] Orden ingresado fuera de rango. Ingrese un numero de orden valido. [E#5]\n");
             set_text_color(7);
             return;
         }
@@ -814,8 +881,26 @@ void baja_fisica(char *arg1){
         //SI EL CREDITO NO EXISTE
         if (creditosbin[orden-1].orden == 0){
             set_text_color(12);
-            printf("[!] No existe un credito en el orden %d.\n", orden);
+            printf("[!] No existe un credito en el orden %d. [E#7]\n", orden);
             set_text_color(7);
+            return;
+        }
+
+        //Emite los datos
+        char ordenstr[32];
+        sprintf(ordenstr, "%d", orden);
+        buscar("orden", ordenstr, NULL);
+
+        char confirmacion;
+        set_text_color(14);
+        printf("Esta seguro que quiere dar baja fisica (BORRAR DE LA TABLA) al credito?\n");
+        set_text_color(7);
+        printf("[S/N]> ");
+        scanf("%c", &confirmacion);
+        fflush(stdin);
+        confirmacion = toupper(confirmacion);
+        if (confirmacion != 'S'){
+            fclose(pArchivo);
             return;
         }
 
